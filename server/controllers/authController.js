@@ -7,12 +7,14 @@ const { OAuth2Client } = require('google-auth-library');
 // In a real app, use SendGrid, AWS SES, or a real SMTP provider.
 // For this task, we will try to use Ethereal for testing or fall back to console logging.
 const sendEmail = async (options) => {
-    // Create a transporter
+      // Create a transporter (Resend.com SMTP)
   const transporter = nodemailer.createTransport({
-    service: 'gmail',  // <--- Use this! It handles Host/Port automatically
+    host: 'smtp.resend.com',
+    secure: true,
+    port: 465,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: 'resend',
+      pass: process.env.EMAIL_PASS, // This will be your API Key
     },
   });
 
