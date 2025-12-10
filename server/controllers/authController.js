@@ -9,15 +9,17 @@ const { OAuth2Client } = require('google-auth-library');
 const sendEmail = async (options) => {
         // Create a transporter (Gmail SSL)
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,       // <--- Try Port 465 (SSL)
-    secure: true,    // <--- Must be true for 465
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false, // True for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
+    tls: {
+      rejectUnauthorized: false // Fixes "Self-signed certificate" errors common on VPS
+    }
   });
-
   const message = {
     from: `${process.env.FROM_NAME || 'ZAMANAT'} <${process.env.FROM_EMAIL || 'noreply@zamanat.com'}>`,
     to: options.email,
