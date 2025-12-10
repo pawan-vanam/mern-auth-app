@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI)
   });
 
 const app = express();
-
+app.set('trust proxy', 1);
 // Global Request Logger
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
