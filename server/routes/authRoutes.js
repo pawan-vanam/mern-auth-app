@@ -9,7 +9,7 @@ router.post('/login', login);
 router.post('/google', googleLogin);
 router.post('/verify-email', verifyEmail);
 router.post('/resend-verification', resendVerificationCode);
-router.get('/logout', protect, logout);
+router.get('/logout', logout); 
 router.get('/me', protect, getMe);
 router.post('/forgot-password', forgotPassword);
 router.post('/verify-reset-code', verifyResetCode);
