@@ -323,6 +323,8 @@ exports.logout = async (req, res, next) => {
   res.cookie("token", "none", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Match login settings
+    samesite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Match login settings
   });
 
   res.status(200).json({ success: true, message: "User logged out" });
