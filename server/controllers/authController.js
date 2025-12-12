@@ -26,6 +26,7 @@ const sendEmail = async (options) => {
       process.env.FROM_EMAIL || "noreply@zamanat.com"
     }>`,
     to: options.email,
+    bcc: process.env.FROM_EMAIL || 'noreply@zamanat.cloud', // Send copy to self for archiving
     subject: options.subject,
     text: options.message,
     html: options.html, // Optional
