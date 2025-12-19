@@ -9,11 +9,7 @@ router.post('/login', login);
 router.post('/google', googleLogin);
 router.post('/verify-email', verifyEmail);
 router.post('/resend-verification', resendVerificationCode);
-<<<<<<< HEAD
-router.get('/logout', logout); 
-=======
 router.get('/logout', logout); // Logout should not require auth (clearing cookie is safe)
->>>>>>> c9436f3 (Initial commit with updated DB config)
 router.get('/me', protect, getMe);
 router.post('/forgot-password', forgotPassword);
 router.post('/verify-reset-code', verifyResetCode);
