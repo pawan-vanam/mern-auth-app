@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f3f4f6; /* Gray-100 */
+  min-height: 100vh;
+}
+
+/* Hide default browser password toggle icons */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
