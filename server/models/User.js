@@ -73,4 +73,4 @@ userSchema.methods.getSignedJwtToken = function() {
   });
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema, 'auth_users');
