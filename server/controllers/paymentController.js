@@ -88,7 +88,8 @@ exports.initiatePayment = async (req, res) => {
                 merchantUrls: {
                     // Redirect to Backend first to handle POST data
                     // Append jobId to ensure we have the ID even if POST body is lost (GET redirect)
-                    redirectUrl: `http://localhost:5000/api/payment/redirect?jobId=${merchantOrderId}`
+                    // Use production URL if in production
+                    redirectUrl: `${process.env.API_URL || 'http://localhost:5000/api'}/payment/redirect?jobId=${merchantOrderId}`
                 }
             }
         };
@@ -157,7 +158,8 @@ exports.handleRedirect = (req, res) => {
 
     // Construct Frontend URL with Query Params
     // Ensure we don't pass 'undefined' strings
-    const frontendUrl = `http://localhost:5173/dashboard?code=${code || ''}&merchantOrderId=${orderId || ''}&providerId=${providerReferenceId || ''}`;
+    const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+    const frontendUrl = `${clientUrl}/dashboard?code=${code || ''}&merchantOrderId=${orderId || ''}&providerId=${providerReferenceId || ''}`;
 
     console.log("-> Redirecting to Frontend:", frontendUrl);
     res.redirect(frontendUrl);
