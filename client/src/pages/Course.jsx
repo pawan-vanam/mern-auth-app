@@ -165,47 +165,59 @@ const Course = () => {
                                         const isCode = type === 'code';
                                         
                                         return (
-                                            <div key={type} className="flex items-center justify-between gap-3 px-4 py-2 bg-gray-50/80 rounded-lg border border-gray-100/50 hover:border-gray-200 transition-colors h-14">
+                                            <div key={type} className={`
+                                                relative group transition-all duration-200 rounded-lg border h-14 flex items-center px-4
+                                                ${!selectedFile 
+                                                    ? 'bg-gray-50/50 border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 cursor-pointer' 
+                                                    : 'bg-white border-gray-200'}
+                                            `}>
                                                 
                                                 {!selectedFile ? (
-                                                    // State: No File + Label
-                                                    <>
-                                                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                                    // State: No File + Label (Centered & Clickable)
+                                                    <div 
+                                                        className="flex items-center justify-between w-full cursor-pointer"
+                                                        onClick={() => handleFileSelect(module.id, type)}
+                                                    >
+                                                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 group-hover:text-indigo-500 transition-colors">
                                                             {isCode ? <CodeBracketIcon className="w-4 h-4" /> : <PhotoIcon className="w-4 h-4" />}
                                                             {type}
                                                         </span>
                                                         
-                                                        <div className="relative">
+                                                        <div className="flex items-center gap-2">
                                                             <input 
                                                                 type="file" 
                                                                 ref={el => fileInputRefs.current[key] = el} 
                                                                 className="hidden" 
                                                                 accept={isCode ? "*" : "image/*"}
                                                                 onChange={(e) => onFileChange(e, module.id, type)}
+                                                                onClick={(e) => e.stopPropagation()} // Prevent double trigger
                                                             />
-                                                            <button 
-                                                                onClick={() => handleFileSelect(module.id, type)}
-                                                                className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-white px-3 py-1.5 rounded-md transition-all shadow-sm bg-white/50 border border-gray-100 flex items-center gap-1.5"
-                                                            >
+                                                            <span className="text-[11px] font-semibold text-gray-500 bg-white border border-gray-200 px-3 py-1.5 rounded-md shadow-sm group-hover:text-indigo-600 group-hover:border-indigo-200 transition-all">
                                                                 + Select
-                                                            </button>
+                                                            </span>
                                                         </div>
-                                                    </>
+                                                    </div>
                                                 ) : (
                                                     // State: File Selected
                                                     <div className="flex items-center justify-between w-full gap-2">
                                                         {/* File Name & Delete Interaction */}
                                                         <button
                                                             onClick={() => removeFile(module.id, type)}
-                                                            className="flex items-center gap-2 min-w-0 flex-1 text-left focus:outline-none group"
+                                                            className="flex items-center gap-2 min-w-0 flex-1 text-left focus:outline-none group/file"
                                                             title="Remove file"
                                                             disabled={status === 'uploading'}
                                                         >
-                                                            {isCode ? <DocumentIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" /> : <PhotoIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" />}
+                                                            {isCode ? (
+                                                                <DocumentIcon className="w-4 h-4 text-gray-400 group-hover/file:text-red-500 transition-colors" />
+                                                            ) : (
+                                                                <PhotoIcon className="w-4 h-4 text-gray-400 group-hover/file:text-red-500 transition-colors" />
+                                                            )}
                                                             
-                                                            <span className="text-xs text-gray-700 font-medium truncate group-hover:text-red-600 transition-colors">
+                                                            <span className="text-xs text-gray-700 font-medium truncate group-hover/file:text-red-600 transition-colors">
                                                                 {selectedFile.name}
                                                             </span>
+                                                            
+                                                            <XMarkIcon className="w-4 h-4 text-gray-300 group-hover/file:text-red-500 opacity-0 group-hover/file:opacity-100 transition-all flex-shrink-0" />
                                                         </button>
 
                                                         {/* Upload Action */}
