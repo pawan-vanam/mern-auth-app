@@ -22,16 +22,22 @@ exports.protect = async (req, res, next) => {
   try {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(`[AuthMiddleware] Decoded ID: ${decoded.id}`);
 
     // Get user from the token id
     req.user = await User.findById(decoded.id);
 
     if (!req.user) {
+        console.log(`[AuthMiddleware] User Not Found for ID: ${decoded.id}`);
+        // Debug: Log all users in DB to see if ID format matches
+        const userCount = await User.countDocuments();
+        console.log(`[AuthMiddleware] Total users in DB: ${userCount}`);
         return res.status(401).json({ success: false, message: 'User not found with this id' });
     }
 
     next();
   } catch (err) {
+    console.error(`[AuthMiddleware] Error: ${err.message}`);
     console.error('Auth Middleware Error:', err.message);
     return res.status(401).json({ success: false, message: 'Not authorized to access this route' });
   }
