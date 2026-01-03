@@ -1,16 +1,4 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { 
-    ArrowLeftIcon, 
-    CodeBracketIcon, 
-    PhotoIcon,
-    CheckCircleIcon,
-    CloudArrowUpIcon
-} from '@heroicons/react/24/outline';
 
-import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
