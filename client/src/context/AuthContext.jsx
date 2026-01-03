@@ -16,16 +16,40 @@ export const AuthProvider = ({ children }) => {
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
   axios.defaults.baseURL = API_URL;
 
+  // Add interceptor to include token in headers
+  useEffect(() => {
+    const interceptor = axios.interceptors.request.use(
+      (config) => {
+        const token = localStorage.getItem('token');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
+
+    return () => axios.interceptors.request.eject(interceptor);
+  }, []);
+
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        setIsLoading(false);
+        return;
+    }
+
     try {
       const res = await axios.get('/auth/me');
       setUser(res.data.data);
       setIsAuthenticated(true);
     } catch (error) {
+      console.error("Auth check failed:", error);
+      localStorage.removeItem('token'); // Clear invalid token
       setUser(null);
       setIsAuthenticated(false);
     } finally {
@@ -38,6 +62,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post('/auth/register', { name, email, password });
       toast.success(res.data.message);
+      // If the backend sends a token on register (optional depending on flow), save it
+      if (res.data.token) {
+          localStorage.setItem('token', res.data.token);
+          setUser(res.data.user);
+          setIsAuthenticated(true);
+      }
       return { success: true, message: res.data.message };
     } catch (error) {
       toast.error(error.response?.data?.message || 'Registration failed');
@@ -51,6 +81,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const res = await axios.post('/auth/login', { email, password });
+      localStorage.setItem('token', res.data.token); // Save token
       setUser(res.data.user);
       setIsAuthenticated(true);
       toast.success('Logged in successfully');
@@ -67,6 +98,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const res = await axios.post('/auth/google', { token: credential });
+      localStorage.setItem('token', res.data.token); // Save token
       setUser(res.data.user);
       setIsAuthenticated(true);
       toast.success('Logged in with Google successfully');
@@ -83,6 +115,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const res = await axios.post('/auth/verify-email', { email, code });
+      localStorage.setItem('token', res.data.token); // Save token
       setUser(res.data.user);
       setIsAuthenticated(true);
       toast.success('Email verified successfully');
@@ -98,12 +131,17 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setIsLoading(true);
     try {
-      await axios.get('/auth/logout');
+      await axios.get('/auth/logout'); // Optional: Call backend to clear cookie if used
+      localStorage.removeItem('token'); // Remove token
       setUser(null);
       setIsAuthenticated(false);
       toast.success('Logged out successfully');
     } catch (error) {
-      toast.error('Logout failed');
+      console.error("Logout error", error);
+      // Force logout on client side even if backend fails
+      localStorage.removeItem('token'); 
+      setUser(null);
+      setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
     }
