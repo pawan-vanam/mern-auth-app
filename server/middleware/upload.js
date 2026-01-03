@@ -6,10 +6,15 @@ const { sanitizeFolderName } = require('../utils/fileSystem');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     try {
+        console.log("-> Multer Storage Destination:");
+        console.log("   Body:", req.body);
+        console.log("   User:", req.user ? req.user.name : "No User");
+
         const { courseName, step } = req.body;
         const userName = req.user.name;
 
         if (!courseName || !step) {
+            console.error("!! Missing courseName or step in req.body. Ensure text fields are appended BEFORE file in FormData.");
             return cb(new Error('Course name and Step are required'));
         }
 
