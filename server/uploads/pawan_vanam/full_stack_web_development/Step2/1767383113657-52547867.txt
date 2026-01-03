@@ -1,0 +1,26 @@
+sudo mkdir -p /var/www/Temp_Docs_testing
+
+sudo chmod 755 /var/www/Temp_Docs_testing
+sudo chown -R root:root /var/www/Temp_Docs_testing
+
+/var/www/Temp_Docs_testing
+
+ls -ld /var/www/Temp_Docs_testing
+
+ls -lh /var/www/Temp_Docs_testing
+
+rm /var/www/Temp_Docs_testing/Welcome_Document.txt
+
+rm /var/www/Temp_Docs_testing/*.pdf
+
+rm -rf /var/www/Temp_Docs_testing/*
+
+rm -rf /var/www/Temp_Docs_testing
+
+
+scp -P 22 "C:\Users\Pawan Vanam\Desktop\svm.pdf" root@72.61.225.120:/var/www/Temp_Docs_testing/
+
+scp "C:\Users\Pawan Vanam\Desktop\Testing Document.txt" root@72.61.225.120:/var/www/Temp_Docs_testing/
+
+scp "C:\Users\Pawan Vanam\Downloads\VANAM PAWAN PRASAD.pdf" root@72.61.225.120:/var/www/Temp_Docs_testing/
+

@@ -162,7 +162,9 @@ export const AuthProvider = ({ children }) => {
     logout,
     forgotPassword,
     verifyResetCode,
-    resetPassword
+    verifyResetCode,
+    resetPassword,
+    refreshUser: checkAuth 
   };
 
   return (

@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import ForgotPassword from './pages/ForgotPassword';
 import VerifyResetCode from './pages/VerifyResetCode';
 import ResetPassword from './pages/ResetPassword';
+import Profile from './pages/Profile';
+import Course from './pages/Course';
 import Loader from './components/Loader';
 
 // Protected Route Component
@@ -77,6 +79,18 @@ function App() {
             <Route path="/dashboard" element={
                 <ProtectedRoute>
                     <Dashboard />
+                </ProtectedRoute>
+            } />
+
+            <Route path="/profile" element={
+                <ProtectedRoute>
+                    <Profile />
+                </ProtectedRoute>
+            } />
+            
+            <Route path="/course" element={
+                <ProtectedRoute>
+                    <Course />
                 </ProtectedRoute>
             } />
         </Routes>

@@ -33,10 +33,12 @@ app.use((req, res, next) => {
 
 // Security Middleware
 app.use(helmet()); // Set security headers
-app.use(cors({
+app.use(cors({    
     origin: [
       'http://localhost:5173', 
       'http://localhost:5174',
+      'https://zamanat.cloud',
+      'https://www.zamanat.cloud',
       process.env.CLIENT_URL // Allow production client
     ].filter(Boolean), // Remove undefined/null if env var not set
     credentials: true, // Allow cookies to be sent
@@ -44,6 +46,7 @@ app.use(cors({
 
 // Body Parsing Middleware
 app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (PhonePe Redirects)
 app.use(cookieParser()); // Parse cookies
 
 // Data Sanitization (Must be after body parsing)
@@ -61,6 +64,9 @@ app.use('/api', limiter);
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/profile', require('./routes/profileRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
