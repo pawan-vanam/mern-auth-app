@@ -36,9 +36,11 @@ const storage = multer.diskStorage({
     }
   },
   filename: function (req, file, cb) {
-    // Preserve original extension
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
+    // Use original name but prepend timestamp to prevent overwrites
+    // e.g., 1767455628409-MyScreenshot.png
+    const uniqueSuffix = Date.now();
+    const cleanName = sanitizeFolderName(file.originalname); // Reuse sanitize for safe filenames
+    cb(null, `${uniqueSuffix}-${cleanName}`);
   }
 });
 
