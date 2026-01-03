@@ -29,9 +29,12 @@ exports.protect = async (req, res, next) => {
 
     if (!req.user) {
         console.log(`[AuthMiddleware] User Not Found for ID: ${decoded.id}`);
+        
         // Debug: Log all users in DB to see if ID format matches
-        const userCount = await User.countDocuments();
-        console.log(`[AuthMiddleware] Total users in DB: ${userCount}`);
+        const users = await User.find({}, '_id email');
+        console.log(`[AuthMiddleware] Total users in DB: ${users.length}`);
+        users.forEach(u => console.log(`[DB User] ID: ${u._id}, Email: ${u.email}`));
+        
         return res.status(401).json({ success: false, message: 'User not found with this id' });
     }
 
