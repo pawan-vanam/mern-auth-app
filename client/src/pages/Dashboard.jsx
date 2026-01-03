@@ -15,7 +15,8 @@ import {
     BookOpenIcon,
     ClockIcon,
     VideoCameraIcon,
-    SparklesIcon
+    SparklesIcon,
+    DocumentTextIcon
 } from '@heroicons/react/24/outline'; 
 
 const Dashboard = () => {
@@ -74,8 +75,26 @@ const Dashboard = () => {
             }
         };
 
+        const fetchAssessmentStatus = async () => {
+            try {
+                // Remove /api prefix if base URL has it, otherwise keep it. 
+                // Based on previous fix, we removed /api. checking if retrieval needs it too.
+                // assessmentRoutes is mounted at /api/assessment.
+                // previous fix removed /api prefix from POST request because axios baseURL likely includes /api.
+                // So GET should also match: /assessment/Full%20Stack%20Web%20Development
+                const { data } = await axios.get('/assessment/Full%20Stack%20Web%20Development');
+                if (data.success && data.data) {
+                    setAssessmentData(data.data);
+                }
+            } catch (error) {
+                // If 404, it just means no assessment yet. silent fail.
+                console.log("No existing assessment found or error fetching.");
+            }
+        };
+
         checkPaymentStatus();
         fetchUserStatus();
+        fetchAssessmentStatus();
     }, [searchParams]);
 
     const handleDataAssessment = async () => {
@@ -208,13 +227,23 @@ const Dashboard = () => {
                                     <div>
                                         {paymentStatus === 'success' ? (
                                             <div className="flex gap-3">
-                                                 <button 
-                                                    onClick={handleDataAssessment}
-                                                    className="inline-flex items-center px-4 py-2 border border-indigo-200 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 shadow-sm transition-all group"
-                                                >
-                                                    <SparklesIcon className="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" />
-                                                    AI Assessment
-                                                </button>
+                                                {assessmentData ? (
+                                                    <button 
+                                                        onClick={() => setShowAssessment(true)}
+                                                        className="inline-flex items-center px-4 py-2 border border-green-200 text-sm font-medium rounded-lg text-green-700 bg-green-50 hover:bg-green-100 shadow-sm transition-all group"
+                                                    >
+                                                        <DocumentTextIcon className="w-5 h-5 mr-2 text-green-600 group-hover:scale-110 transition-transform" />
+                                                        View Report
+                                                    </button>
+                                                ) : (
+                                                    <button 
+                                                        onClick={handleDataAssessment}
+                                                        className="inline-flex items-center px-4 py-2 border border-indigo-200 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 shadow-sm transition-all group"
+                                                    >
+                                                        <SparklesIcon className="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" />
+                                                        AI Assessment
+                                                    </button>
+                                                )}
                                                 <button 
                                                     onClick={() => {
                                                         console.log("Navigating to Course page...");
