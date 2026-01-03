@@ -131,31 +131,31 @@ const Course = () => {
                 </div>
 
                 {/* Modules Grid */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                     {modules.map((module) => (
                         <div 
                             key={module.id} 
-                            className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300"
+                            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300"
                         >
-                            <div className="p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div className="p-5 flex flex-col lg:flex-row lg:items-center gap-6">
                                 
-                                {/* Module Info */}
-                                <div className="flex items-center gap-3 md:w-1/3">
-                                    <div className="flex-shrink-0 h-8 w-8 rounded-md bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+                                {/* Module Info - Fixed Width */}
+                                <div className="flex items-center gap-4 lg:w-[320px] flex-shrink-0">
+                                    <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
                                         {module.id}
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-sm font-bold text-gray-900 truncate">
+                                        <h3 className="text-lg font-bold text-gray-900 truncate">
                                             {module.title}
                                         </h3>
-                                        <p className="text-[10px] text-gray-500 truncate">
+                                        <p className="text-sm text-gray-500 truncate">
                                             {module.description}
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Actions Container - Side by Side */}
-                                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-2/3">
+                                {/* Actions Container - Flexible Grid */}
+                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
                                     
                                     {/* Upload Rows */}
                                     {['code', 'screenshot'].map(type => {
@@ -165,17 +165,17 @@ const Course = () => {
                                         const isCode = type === 'code';
                                         
                                         return (
-                                            <div key={type} className="flex-1 bg-gray-50 rounded-md px-3 py-2 border border-gray-100 flex items-center justify-between gap-2 h-12">
+                                            <div key={type} className="flex items-center justify-between gap-3 px-2">
                                                 
                                                 {!selectedFile ? (
-                                                    // State: No File Selected
+                                                    // State: No File + Label
                                                     <>
-                                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 min-w-0">
-                                                            {isCode ? <CodeBracketIcon className="w-3.5 h-3.5" /> : <PhotoIcon className="w-3.5 h-3.5" />}
-                                                            <span className="truncate">{type}</span>
+                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                                            {isCode ? <CodeBracketIcon className="w-4 h-4" /> : <PhotoIcon className="w-4 h-4" />}
+                                                            {type}
                                                         </span>
                                                         
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="relative">
                                                             <input 
                                                                 type="file" 
                                                                 ref={el => fileInputRefs.current[key] = el} 
@@ -185,7 +185,7 @@ const Course = () => {
                                                             />
                                                             <button 
                                                                 onClick={() => handleFileSelect(module.id, type)}
-                                                                className="text-[10px] font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-2 py-1 rounded transition-colors whitespace-nowrap"
+                                                                className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1"
                                                             >
                                                                 + Select
                                                             </button>
@@ -193,45 +193,45 @@ const Course = () => {
                                                     </>
                                                 ) : (
                                                     // State: File Selected
-                                                    <>
+                                                    <div className="flex items-center justify-between w-full bg-gray-50/50 rounded-lg px-3 py-1.5 border border-gray-100 hover:border-gray-300 transition-colors group">
                                                         {/* File Name & Delete Interaction */}
                                                         <button
                                                             onClick={() => removeFile(module.id, type)}
-                                                            className="flex-1 flex items-center gap-2 min-w-0 group text-left focus:outline-none"
-                                                            title="Click to remove"
+                                                            className="flex items-center gap-2 min-w-0 flex-1 text-left focus:outline-none mr-2"
+                                                            title="Remove file"
                                                             disabled={status === 'uploading'}
                                                         >
-                                                            <div className="flex-shrink-0 text-gray-400 group-hover:text-red-500 transition-colors">
-                                                                <DocumentIcon className="w-4 h-4 group-hover:hidden" />
-                                                                <XMarkIcon className="w-4 h-4 hidden group-hover:block" />
-                                                            </div>
-                                                            <span className="text-xs text-gray-700 truncate font-medium group-hover:text-red-500 transition-colors">
+                                                            {isCode ? <DocumentIcon className="w-4 h-4 text-gray-400" /> : <PhotoIcon className="w-4 h-4 text-gray-400" />}
+                                                            
+                                                            <span className="text-xs text-gray-700 font-medium truncate group-hover:text-red-600 transition-colors">
                                                                 {selectedFile.name}
                                                             </span>
+                                                            
+                                                            <XMarkIcon className="w-4 h-4 text-gray-300 group-hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0" />
                                                         </button>
 
                                                         {/* Upload Action */}
-                                                        <div className="flex items-center gap-2">
+                                                        <div className="flex-shrink-0">
                                                             {status === 'success' ? (
-                                                                <span className="h-8 w-8 flex items-center justify-center bg-green-50 text-green-600 rounded-full border border-green-100" title="Uploaded Successfully">
+                                                                <span className="text-green-500 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider">
                                                                     <CheckCircleIcon className="w-5 h-5" />
                                                                 </span>
                                                             ) : (
                                                                 <button 
                                                                     onClick={() => uploadFile(module.id, type)}
                                                                     disabled={status === 'uploading'}
-                                                                    className="h-8 w-8 flex items-center justify-center bg-indigo-600 text-white rounded-full shadow-sm hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100"
-                                                                    title="Upload Now"
+                                                                    className="h-7 w-7 flex items-center justify-center bg-indigo-600 text-white rounded-full shadow-sm hover:bg-indigo-700 hover:shadow-md hover:scale-105 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100"
+                                                                    title="Upload Information"
                                                                 >
                                                                     {status === 'uploading' ? (
-                                                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                                        <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                                                     ) : (
-                                                                        <CloudArrowUpIcon className="w-4 h-4" />
+                                                                        <CloudArrowUpIcon className="w-3.5 h-3.5" />
                                                                     )}
                                                                 </button>
                                                             )}
                                                         </div>
-                                                    </>
+                                                    </div>
                                                 )}
                                             </div>
                                         );
