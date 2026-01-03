@@ -137,25 +137,25 @@ const Course = () => {
                             key={module.id} 
                             className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300"
                         >
-                            <div className="p-5 flex flex-col lg:flex-row lg:items-center gap-6">
+                            <div className="p-4 flex flex-col lg:flex-row lg:items-center gap-4">
                                 
-                                {/* Module Info - Fixed Width */}
-                                <div className="flex items-center gap-4 lg:w-[320px] flex-shrink-0">
+                                {/* Module Info - Adaptive Width */}
+                                <div className="flex items-center gap-4 lg:w-[280px] flex-shrink-0">
                                     <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-lg shadow-sm">
                                         {module.id}
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-lg font-bold text-gray-900 truncate">
+                                        <h3 className="text-base font-bold text-gray-900 truncate">
                                             {module.title}
                                         </h3>
-                                        <p className="text-sm text-gray-500 truncate">
+                                        <p className="text-xs text-gray-500 truncate">
                                             {module.description}
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Actions Container - Flexible Grid */}
-                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                                {/* Actions Container - Compact Grid */}
+                                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
                                     
                                     {/* Upload Rows */}
                                     {['code', 'screenshot'].map(type => {
@@ -165,12 +165,12 @@ const Course = () => {
                                         const isCode = type === 'code';
                                         
                                         return (
-                                            <div key={type} className="flex items-center justify-between gap-3 px-2">
+                                            <div key={type} className="flex items-center justify-between gap-3 px-4 py-2 bg-gray-50/80 rounded-lg border border-gray-100/50 hover:border-gray-200 transition-colors h-14">
                                                 
                                                 {!selectedFile ? (
                                                     // State: No File + Label
                                                     <>
-                                                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                                        <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
                                                             {isCode ? <CodeBracketIcon className="w-4 h-4" /> : <PhotoIcon className="w-4 h-4" />}
                                                             {type}
                                                         </span>
@@ -185,7 +185,7 @@ const Course = () => {
                                                             />
                                                             <button 
                                                                 onClick={() => handleFileSelect(module.id, type)}
-                                                                className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1"
+                                                                className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-700 hover:bg-white px-3 py-1.5 rounded-md transition-all shadow-sm bg-white/50 border border-gray-100 flex items-center gap-1.5"
                                                             >
                                                                 + Select
                                                             </button>
@@ -193,40 +193,38 @@ const Course = () => {
                                                     </>
                                                 ) : (
                                                     // State: File Selected
-                                                    <div className="flex items-center justify-between w-full bg-gray-50/50 rounded-lg px-3 py-1.5 border border-gray-100 hover:border-gray-300 transition-colors group">
+                                                    <div className="flex items-center justify-between w-full gap-2">
                                                         {/* File Name & Delete Interaction */}
                                                         <button
                                                             onClick={() => removeFile(module.id, type)}
-                                                            className="flex items-center gap-2 min-w-0 flex-1 text-left focus:outline-none mr-2"
+                                                            className="flex items-center gap-2 min-w-0 flex-1 text-left focus:outline-none group"
                                                             title="Remove file"
                                                             disabled={status === 'uploading'}
                                                         >
-                                                            {isCode ? <DocumentIcon className="w-4 h-4 text-gray-400" /> : <PhotoIcon className="w-4 h-4 text-gray-400" />}
+                                                            {isCode ? <DocumentIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" /> : <PhotoIcon className="w-4 h-4 text-gray-400 group-hover:text-red-500 transition-colors" />}
                                                             
                                                             <span className="text-xs text-gray-700 font-medium truncate group-hover:text-red-600 transition-colors">
                                                                 {selectedFile.name}
                                                             </span>
-                                                            
-                                                            <XMarkIcon className="w-4 h-4 text-gray-300 group-hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all flex-shrink-0" />
                                                         </button>
 
                                                         {/* Upload Action */}
-                                                        <div className="flex-shrink-0">
+                                                        <div className="flex-shrink-0 ml-2">
                                                             {status === 'success' ? (
-                                                                <span className="text-green-500 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider">
+                                                                <span className="text-green-500 flex items-center justify-center p-1 bg-green-50 rounded-full">
                                                                     <CheckCircleIcon className="w-5 h-5" />
                                                                 </span>
                                                             ) : (
                                                                 <button 
                                                                     onClick={() => uploadFile(module.id, type)}
                                                                     disabled={status === 'uploading'}
-                                                                    className="h-7 w-7 flex items-center justify-center bg-indigo-600 text-white rounded-full shadow-sm hover:bg-indigo-700 hover:shadow-md hover:scale-105 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100"
-                                                                    title="Upload Information"
+                                                                    className="h-8 w-8 flex items-center justify-center bg-indigo-600 text-white rounded-full shadow-sm hover:bg-indigo-700 hover:shadow-md hover:scale-105 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100"
+                                                                    title="Upload"
                                                                 >
                                                                     {status === 'uploading' ? (
                                                                         <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                                                     ) : (
-                                                                        <CloudArrowUpIcon className="w-3.5 h-3.5" />
+                                                                        <CloudArrowUpIcon className="w-4 h-4" />
                                                                     )}
                                                                 </button>
                                                             )}
