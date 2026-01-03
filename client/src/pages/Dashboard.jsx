@@ -4,6 +4,7 @@ import Button from '../components/Button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import AssessmentResult from '../components/AssessmentResult';
 import { 
     UserCircleIcon, 
     CheckBadgeIcon, 
@@ -13,7 +14,8 @@ import {
     PencilSquareIcon,
     BookOpenIcon,
     ClockIcon,
-    VideoCameraIcon
+    VideoCameraIcon,
+    SparklesIcon
 } from '@heroicons/react/24/outline'; 
 
 const Dashboard = () => {
@@ -26,7 +28,10 @@ const Dashboard = () => {
     };
 
     const [searchParams] = useSearchParams();
-    const [paymentStatus, setPaymentStatus] = useState('idle'); // idle, loading, success, failed
+    const [paymentStatus, setPaymentStatus] = useState('idle');
+    const [showAssessment, setShowAssessment] = useState(false);
+    const [assessmentData, setAssessmentData] = useState(null);
+    const [isAssessing, setIsAssessing] = useState(false);
 
     useEffect(() => {
         const checkPaymentStatus = async () => {
@@ -72,6 +77,26 @@ const Dashboard = () => {
         checkPaymentStatus();
         fetchUserStatus();
     }, [searchParams]);
+
+    const handleDataAssessment = async () => {
+        setIsAssessing(true);
+        setShowAssessment(true);
+        try {
+            const { data } = await axios.post('/api/assessment', { 
+                courseName: 'Full Stack Web Development' 
+            });
+            if (data.success) {
+                setAssessmentData(data.data);
+                toast.success('Assessment Completed!');
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error(error.response?.data?.message || 'Assessment Failed');
+            setShowAssessment(false);
+        } finally {
+            setIsAssessing(false);
+        }
+    };
 
     const handlePayment = async () => {
         try {
@@ -182,15 +207,24 @@ const Dashboard = () => {
                                     
                                     <div>
                                         {paymentStatus === 'success' ? (
-                                            <button 
-                                                onClick={() => {
-                                                    console.log("Navigating to Course page...");
-                                                    navigate('/course');
-                                                }}
-                                                className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-all"
-                                            >
-                                                Go to Course <span className="ml-2">→</span>
-                                            </button>
+                                            <div className="flex gap-3">
+                                                 <button 
+                                                    onClick={handleDataAssessment}
+                                                    className="inline-flex items-center px-4 py-2 border border-indigo-200 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 shadow-sm transition-all group"
+                                                >
+                                                    <SparklesIcon className="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" />
+                                                    AI Assessment
+                                                </button>
+                                                <button 
+                                                    onClick={() => {
+                                                        console.log("Navigating to Course page...");
+                                                        navigate('/course');
+                                                    }}
+                                                    className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-all"
+                                                >
+                                                    Go to Course <span className="ml-2">→</span>
+                                                </button>
+                                            </div>
                                         ) : (
                                             <button 
                                                 onClick={handlePayment} 
@@ -256,6 +290,12 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+            <AssessmentResult 
+                open={showAssessment} 
+                onClose={() => setShowAssessment(false)} 
+                result={assessmentData}
+                isLoading={isAssessing}
+            />
         </div>
     );
 };
