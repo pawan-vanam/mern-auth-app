@@ -23,8 +23,8 @@ const assessCourse = async (req, res) => {
         }
 
         // 2. Prepare Data for Gemini
-        // Using gemini-1.5-flash-002 as the specific stable version.
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" }); 
+        // Using gemini-2.5-flash as explicitly requested.
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); 
         
         const promptIntro = `You are an expert coding instructor and AI grader. 
         Analyze the following code files and screenshots submitted by a student for the course "${courseName}".
