@@ -39,6 +39,8 @@ app.use(cors({
       'http://localhost:5174',
       'https://zamanat.cloud',
       'https://www.zamanat.cloud',
+      'https://pawan-temp.netlify.app',
+      'https://api.zamanat.cloud',
       process.env.CLIENT_URL // Allow production client
     ].filter(Boolean), // Remove undefined/null if env var not set
     credentials: true, // Allow cookies to be sent
