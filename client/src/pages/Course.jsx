@@ -131,31 +131,31 @@ const Course = () => {
                 </div>
 
                 {/* Modules Grid */}
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {modules.map((module) => (
                         <div 
                             key={module.id} 
                             className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300"
                         >
-                            <div className="p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                            <div className="p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 
                                 {/* Module Info */}
-                                <div className="flex items-start gap-4 lg:w-1/3">
-                                    <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-base shadow-sm">
+                                <div className="flex items-center gap-3 md:w-1/3">
+                                    <div className="flex-shrink-0 h-8 w-8 rounded-md bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
                                         {module.id}
                                     </div>
-                                    <div className="pt-0.5">
-                                        <h3 className="text-base font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">
+                                    <div className="min-w-0">
+                                        <h3 className="text-sm font-bold text-gray-900 truncate">
                                             {module.title}
                                         </h3>
-                                        <p className="text-xs text-gray-500 mt-0.5">
+                                        <p className="text-[10px] text-gray-500 truncate">
                                             {module.description}
                                         </p>
                                     </div>
                                 </div>
 
-                                {/* Actions Container - Side by Side on Desktop */}
-                                <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-2/3">
+                                {/* Actions Container - Side by Side */}
+                                <div className="flex flex-col sm:flex-row gap-3 w-full md:w-2/3">
                                     
                                     {/* Upload Rows */}
                                     {['code', 'screenshot'].map(type => {
@@ -165,69 +165,73 @@ const Course = () => {
                                         const isCode = type === 'code';
                                         
                                         return (
-                                            <div key={type} className="flex-1 bg-gray-50 rounded-lg p-3 border border-gray-100">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
-                                                        {isCode ? <CodeBracketIcon className="w-3.5 h-3.5" /> : <PhotoIcon className="w-3.5 h-3.5" />}
-                                                        {type} Source
-                                                    </span>
-                                                    {status === 'success' && (
-                                                        <span className="text-[10px] font-medium text-green-600 flex items-center gap-1 bg-green-50 px-1.5 py-0.5 rounded-full border border-green-100">
-                                                            <CheckCircleIcon className="w-3 h-3" /> Uploaded
-                                                        </span>
-                                                    )}
-                                                </div>
-
+                                            <div key={type} className="flex-1 bg-gray-50 rounded-md px-3 py-2 border border-gray-100 flex items-center justify-between gap-2 h-12">
+                                                
                                                 {!selectedFile ? (
                                                     // State: No File Selected
-                                                    <div className="flex items-center gap-2">
-                                                        <input 
-                                                            type="file" 
-                                                            ref={el => fileInputRefs.current[key] = el} 
-                                                            className="hidden" 
-                                                            accept={isCode ? "*" : "image/*"}
-                                                            onChange={(e) => onFileChange(e, module.id, type)}
-                                                        />
-                                                        <button 
-                                                            onClick={() => handleFileSelect(module.id, type)}
-                                                            className="w-full py-1.5 px-3 bg-white border border-dashed border-gray-300 rounded text-xs text-gray-600 hover:border-indigo-400 hover:text-indigo-600 transition-all flex items-center justify-center gap-1.5 h-9"
-                                                        >
-                                                            <DocumentIcon className="w-3.5 h-3.5" />
-                                                            Select Check
-                                                        </button>
-                                                    </div>
+                                                    <>
+                                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 min-w-0">
+                                                            {isCode ? <CodeBracketIcon className="w-3.5 h-3.5" /> : <PhotoIcon className="w-3.5 h-3.5" />}
+                                                            <span className="truncate">{type}</span>
+                                                        </span>
+                                                        
+                                                        <div className="flex items-center gap-2">
+                                                            <input 
+                                                                type="file" 
+                                                                ref={el => fileInputRefs.current[key] = el} 
+                                                                className="hidden" 
+                                                                accept={isCode ? "*" : "image/*"}
+                                                                onChange={(e) => onFileChange(e, module.id, type)}
+                                                            />
+                                                            <button 
+                                                                onClick={() => handleFileSelect(module.id, type)}
+                                                                className="text-[10px] font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 px-2 py-1 rounded transition-colors whitespace-nowrap"
+                                                            >
+                                                                + Select
+                                                            </button>
+                                                        </div>
+                                                    </>
                                                 ) : (
                                                     // State: File Selected
-                                                    <div className="flex items-center gap-2 animate-fadeIn w-full">
-                                                        <div className="flex-1 bg-white border border-gray-200 rounded px-2 py-1.5 flex items-center gap-2 overflow-hidden h-9">
-                                                            <DocumentIcon className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
-                                                            <span className="text-xs text-gray-700 truncate font-medium">
+                                                    <>
+                                                        {/* File Name & Delete Interaction */}
+                                                        <button
+                                                            onClick={() => removeFile(module.id, type)}
+                                                            className="flex-1 flex items-center gap-2 min-w-0 group text-left focus:outline-none"
+                                                            title="Click to remove"
+                                                            disabled={status === 'uploading'}
+                                                        >
+                                                            <div className="flex-shrink-0 text-gray-400 group-hover:text-red-500 transition-colors">
+                                                                <DocumentIcon className="w-4 h-4 group-hover:hidden" />
+                                                                <XMarkIcon className="w-4 h-4 hidden group-hover:block" />
+                                                            </div>
+                                                            <span className="text-xs text-gray-700 truncate font-medium group-hover:text-red-500 transition-colors">
                                                                 {selectedFile.name}
                                                             </span>
-                                                        </div>
-                                                        
-                                                        <button 
-                                                            onClick={() => removeFile(module.id, type)}
-                                                            disabled={status === 'uploading'}
-                                                            className="h-9 w-9 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors disabled:opacity-50"
-                                                            title="Remove file"
-                                                        >
-                                                            <XMarkIcon className="w-4 h-4" />
                                                         </button>
 
-                                                        <button 
-                                                            onClick={() => uploadFile(module.id, type)}
-                                                            disabled={status === 'uploading'}
-                                                            className="h-9 px-3 bg-indigo-600 text-white text-xs font-medium rounded shadow-sm hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100 flex items-center gap-1.5"
-                                                        >
-                                                            {status === 'uploading' ? (
-                                                                <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                        {/* Upload Action */}
+                                                        <div className="flex items-center gap-2">
+                                                            {status === 'success' ? (
+                                                                <span className="h-8 w-8 flex items-center justify-center bg-green-50 text-green-600 rounded-full border border-green-100" title="Uploaded Successfully">
+                                                                    <CheckCircleIcon className="w-5 h-5" />
+                                                                </span>
                                                             ) : (
-                                                                <CloudArrowUpIcon className="w-3.5 h-3.5" />
+                                                                <button 
+                                                                    onClick={() => uploadFile(module.id, type)}
+                                                                    disabled={status === 'uploading'}
+                                                                    className="h-8 w-8 flex items-center justify-center bg-indigo-600 text-white rounded-full shadow-sm hover:bg-indigo-700 active:scale-95 transition-all disabled:opacity-70 disabled:active:scale-100"
+                                                                    title="Upload Now"
+                                                                >
+                                                                    {status === 'uploading' ? (
+                                                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                                    ) : (
+                                                                        <CloudArrowUpIcon className="w-4 h-4" />
+                                                                    )}
+                                                                </button>
                                                             )}
-                                                            Upload
-                                                        </button>
-                                                    </div>
+                                                        </div>
+                                                    </>
                                                 )}
                                             </div>
                                         );
