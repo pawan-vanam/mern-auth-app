@@ -82,7 +82,7 @@ const Dashboard = () => {
         setIsAssessing(true);
         setShowAssessment(true);
         try {
-            const { data } = await axios.post('/api/assessment', { 
+            const { data } = await axios.post('/assessment', { 
                 courseName: 'Full Stack Web Development' 
             });
             if (data.success) {
