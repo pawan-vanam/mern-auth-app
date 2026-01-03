@@ -28,11 +28,14 @@ app.set('trust proxy', 1); // <--- ADD THIS. This fixes the refresh issue.
 // Global Request Logger
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  console.log(`Origin: ${req.headers.origin}, Host: ${req.headers.host}`);
   next();
 });
 
 // Security Middleware
-app.use(helmet()); // Set security headers
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" } // Allow cross-origin for Option-B/Netlify
+})); // Set security headers
 app.use(cors({    
     origin: [
       'http://localhost:5173', 
