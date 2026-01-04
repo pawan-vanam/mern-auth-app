@@ -124,16 +124,16 @@ const UploadedFiles = () => {
                                 
                                 <div className="p-6">
                                     {moduleFiles.length > 0 ? (
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="flex flex-wrap gap-4">
                                             {moduleFiles.map((file) => (
-                                                <div key={file._id} className="group flex items-center p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all justify-between">
-                                                    <div className="flex items-center min-w-0">
-                                                        <div className={`h-10 w-10 flex-shrink-0 rounded-lg flex items-center justify-center mr-4 
+                                                <div key={file._id} className="group flex items-center p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all w-full sm:w-auto max-w-full">
+                                                    <div className="flex items-center min-w-0 flex-1 sm:flex-initial">
+                                                        <div className={`h-10 w-10 flex-shrink-0 rounded-lg flex items-center justify-center mr-3 
                                                             ${file.type === 'code' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'}`}>
                                                             {file.type === 'code' ? <CodeBracketIcon className="h-6 w-6" /> : <PhotoIcon className="h-6 w-6" />}
                                                         </div>
-                                                        <div className="min-w-0">
-                                                            <p className="text-sm font-medium text-gray-900 truncate" title={file.originalName}>
+                                                        <div className="min-w-0 flex-1 sm:flex-initial mr-2">
+                                                            <p className="text-sm font-medium text-gray-900 truncate max-w-[200px]" title={file.originalName}>
                                                                 {file.originalName}
                                                             </p>
                                                             <p className="text-xs text-gray-500 flex items-center gap-2">
