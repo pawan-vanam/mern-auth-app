@@ -55,10 +55,21 @@ router.get('/:courseName', protect, async (req, res) => {
             courseName 
         }).sort({ step: 1, type: 1 }); // Sort by step (Module 1, 2...) then type
 
+        const validAssignments = [];
+
+        for (const assignment of assignments) {
+            if (fs.existsSync(assignment.serverPath)) {
+                validAssignments.push(assignment);
+            } else {
+                // File deleted from disk, remove from DB
+                await Assignment.deleteOne({ _id: assignment._id });
+            }
+        }
+
         res.status(200).json({
             success: true,
-            count: assignments.length,
-            data: assignments
+            count: validAssignments.length,
+            data: validAssignments
         });
     } catch (error) {
         console.error('Fetch Files Error:', error);
