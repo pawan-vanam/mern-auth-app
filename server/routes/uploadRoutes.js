@@ -57,17 +57,37 @@ router.get('/:courseName', protect, async (req, res) => {
 
         const validAssignments = [];
 
+        console.log(`Found ${assignments.length} assignments for course: ${courseName}`);
+
         for (const assignment of assignments) {
-            if (fs.existsSync(assignment.serverPath)) {
+            console.log(`Checking file: ${assignment.originalName}`);
+            console.log(`  Path: ${assignment.serverPath}`);
+            const exists = fs.existsSync(assignment.serverPath);
+            console.log(`  Exists? ${exists}`);
+
+            if (exists) {
                 validAssignments.push(assignment);
             } else {
-                // File deleted from disk, remove from DB
-                await Assignment.deleteOne({ _id: assignment._id });
+                console.warn(`  File missing on disk! ID: ${assignment._id}`);
+                // TEMPORARY: Disable auto-delete to prevent data loss across environments
+                // await Assignment.deleteOne({ _id: assignment._id }); 
+                
+                // Still filter it from view? 
+                // If we want to debug, let's SHOW it but maybe mark it? 
+                // For now, let's keep the filter behavior (client wants sync) 
+                // BUT if the DB is shared, this hides valid files from other envs.
+                // Let's comment out the filter push logic too if we want to force show them testing.
+                // But the user *wants* sync. 
+                
+                // Strategy: Log it but INCLUDE it for now so the user can see "Oh, it's looking for X path".
+                // And verify if the files are actually in DB.
+                validAssignments.push(assignment); 
             }
         }
 
         res.status(200).json({
             success: true,
+            // Return ALL assignments found in DB for debugging purposes
             count: validAssignments.length,
             data: validAssignments
         });
