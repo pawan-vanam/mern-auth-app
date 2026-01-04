@@ -7,7 +7,8 @@ import {
     PhotoIcon,
     DocumentTextIcon,
     FolderIcon,
-    ArrowDownTrayIcon
+    ArrowDownTrayIcon,
+    TrashIcon
 } from '@heroicons/react/24/outline';
 import Loader from '../components/Loader';
 
@@ -46,8 +47,17 @@ const UploadedFiles = () => {
         fetchFiles();
     }, []);
 
-    const getFilesForModule = (moduleId) => {
-        return files.filter(f => f.step === moduleId);
+    const handleDelete = async (fileId, fileName) => {
+        if (!window.confirm(`Are you sure you want to delete "${fileName}"?`)) return;
+
+        try {
+            await axios.delete(`/upload/${fileId}`);
+            setFiles(prev => prev.filter(f => f._id !== fileId));
+            // toast.success("File deleted successfully"); // Removed toast import to minimize changes, but could add if needed.
+        } catch (err) {
+            console.error("Delete failed", err);
+            setError("Failed to delete file");
+        }
     };
 
     if (loading) return <Loader />;
@@ -89,11 +99,7 @@ const UploadedFiles = () => {
                 <div className="space-y-6">
                     {modules.map((module) => {
                         const moduleFiles = getFilesForModule(module.id);
-                        if (moduleFiles.length === 0) return null; // Hide empty modules? Or show placeholder? 
-                        // Let's show all modules but indicate empty state if user wants consistency, 
-                        // but "view uploads" implies seeing WHAT is uploaded. 
-                        // For a cleaner look, let's only show modules with content, OR show all.
-                        // Showing all allows user to see what is MISSING too.
+                        if (moduleFiles.length === 0) return null; 
                         
                         return (
                             <div key={module.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
@@ -116,25 +122,30 @@ const UploadedFiles = () => {
                                     {moduleFiles.length > 0 ? (
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             {moduleFiles.map((file) => (
-                                                <div key={file._id} className="group flex items-center p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all">
-                                                    <div className={`h-10 w-10 flex-shrink-0 rounded-lg flex items-center justify-center mr-4 
-                                                        ${file.type === 'code' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'}`}>
-                                                        {file.type === 'code' ? <CodeBracketIcon className="h-6 w-6" /> : <PhotoIcon className="h-6 w-6" />}
+                                                <div key={file._id} className="group flex items-center p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50/30 transition-all justify-between">
+                                                    <div className="flex items-center min-w-0">
+                                                        <div className={`h-10 w-10 flex-shrink-0 rounded-lg flex items-center justify-center mr-4 
+                                                            ${file.type === 'code' ? 'bg-blue-100 text-blue-600' : 'bg-purple-100 text-purple-600'}`}>
+                                                            {file.type === 'code' ? <CodeBracketIcon className="h-6 w-6" /> : <PhotoIcon className="h-6 w-6" />}
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <p className="text-sm font-medium text-gray-900 truncate" title={file.originalName}>
+                                                                {file.originalName}
+                                                            </p>
+                                                            <p className="text-xs text-gray-500 flex items-center gap-2">
+                                                                <span className="capitalize">{file.type}</span>
+                                                                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
+                                                                <span>{(file.size / 1024).toFixed(1)} KB</span>
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="text-sm font-medium text-gray-900 truncate" title={file.originalName}>
-                                                            {file.originalName}
-                                                        </p>
-                                                        <p className="text-xs text-gray-500 flex items-center gap-2">
-                                                            <span className="capitalize">{file.type}</span>
-                                                            <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                                            <span>{(file.size / 1024).toFixed(1)} KB</span>
-                                                        </p>
-                                                    </div>
-                                                    {/* Optional: Add download/view button if public URL is available. 
-                                                        Since files are on server disk and not served statically directly without auth, 
-                                                        we'd need a download route. For now, just listing them. 
-                                                    */}
+                                                    <button 
+                                                        onClick={() => handleDelete(file._id, file.originalName)}
+                                                        className="ml-2 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                                        title="Delete File"
+                                                    >
+                                                        <TrashIcon className="h-5 w-5" />
+                                                    </button>
                                                 </div>
                                             ))}
                                         </div>

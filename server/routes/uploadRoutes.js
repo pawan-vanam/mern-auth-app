@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const fs = require('fs');
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/upload');
 const Assignment = require('../models/Assignment');
@@ -62,6 +63,37 @@ router.get('/:courseName', protect, async (req, res) => {
     } catch (error) {
         console.error('Fetch Files Error:', error);
         res.status(500).json({ success: false, message: 'Server Error fetching files' });
+    }
+});
+
+// @route   DELETE /api/upload/:id
+// @desc    Delete an assignment
+// @access  Private
+router.delete('/:id', protect, async (req, res) => {
+    try {
+        const assignment = await Assignment.findById(req.params.id);
+
+        if (!assignment) {
+            return res.status(404).json({ success: false, message: 'File not found' });
+        }
+
+        // Make sure user owns the assignment
+        if (assignment.user.toString() !== req.user.id) {
+            return res.status(401).json({ success: false, message: 'Not authorized' });
+        }
+
+        // Delete from file system
+        if (fs.existsSync(assignment.serverPath)) {
+            fs.unlinkSync(assignment.serverPath);
+        }
+
+        // Delete from MongoDB
+        await assignment.deleteOne();
+
+        res.status(200).json({ success: true, message: 'File deleted successfully' });
+    } catch (error) {
+        console.error('Delete Error:', error);
+        res.status(500).json({ success: false, message: 'Server Error deleting file' });
     }
 });
 
