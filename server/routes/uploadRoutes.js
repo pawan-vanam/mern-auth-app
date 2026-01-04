@@ -37,6 +37,8 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
             data: assignment
         });
 
+    } catch (error) {
+        console.error('Upload Error:', error);
         res.status(500).json({ success: false, message: 'Server Error during upload' });
     }
 });
