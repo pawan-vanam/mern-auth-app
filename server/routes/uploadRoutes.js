@@ -37,9 +37,29 @@ router.post('/', protect, upload.single('file'), async (req, res) => {
             data: assignment
         });
 
-    } catch (error) {
-        console.error('Upload Error:', error);
         res.status(500).json({ success: false, message: 'Server Error during upload' });
+    }
+});
+
+// @route   GET /api/upload/:courseName
+// @desc    Get all uploaded files for a course
+// @access  Private
+router.get('/:courseName', protect, async (req, res) => {
+    try {
+        const { courseName } = req.params;
+        const assignments = await Assignment.find({ 
+            user: req.user.id, 
+            courseName 
+        }).sort({ step: 1, type: 1 }); // Sort by step (Module 1, 2...) then type
+
+        res.status(200).json({
+            success: true,
+            count: assignments.length,
+            data: assignments
+        });
+    } catch (error) {
+        console.error('Fetch Files Error:', error);
+        res.status(500).json({ success: false, message: 'Server Error fetching files' });
     }
 });
 

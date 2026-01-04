@@ -11,6 +11,7 @@ import ResetPassword from './pages/ResetPassword';
 import Profile from './pages/Profile';
 import Course from './pages/Course';
 import Loader from './components/Loader';
+import UploadedFiles from './pages/UploadedFiles';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -91,6 +92,12 @@ function App() {
             <Route path="/course" element={
                 <ProtectedRoute>
                     <Course />
+                </ProtectedRoute>
+            } />
+
+            <Route path="/uploaded-files" element={
+                <ProtectedRoute>
+                    <UploadedFiles />
                 </ProtectedRoute>
             } />
         </Routes>

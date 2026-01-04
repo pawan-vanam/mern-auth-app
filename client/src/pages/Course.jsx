@@ -121,12 +121,23 @@ const Course = () => {
                     </button>
                     <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full blur-3xl -mr-32 -mt-32 opacity-50"></div>
-                        <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight relative z-10">
-                            Full Stack Web Development
-                        </h1>
-                        <p className="mt-2 text-gray-500 max-w-2xl relative z-10">
-                            Upload your assignments code and screenshots below. Your progress is tracked automatically.
-                        </p>
+                        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                                    Full Stack Web Development
+                                </h1>
+                                <p className="mt-2 text-gray-500 max-w-2xl">
+                                    Upload your assignments code and screenshots below. Your progress is tracked automatically.
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => navigate('/uploaded-files')}
+                                className="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:text-indigo-600 transition-all self-start md:self-center"
+                            >
+                                <CloudArrowUpIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-indigo-500" />
+                                Uploaded Files
+                            </button>
+                        </div>
                     </div>
                 </div>
 
