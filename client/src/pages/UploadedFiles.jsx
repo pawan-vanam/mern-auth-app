@@ -47,6 +47,10 @@ const UploadedFiles = () => {
         fetchFiles();
     }, []);
 
+    const getFilesForModule = (moduleId) => {
+        return files.filter(f => f.step === moduleId);
+    };
+
     const handleDelete = async (fileId, fileName) => {
         if (!window.confirm(`Are you sure you want to delete "${fileName}"?`)) return;
 
