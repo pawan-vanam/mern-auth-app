@@ -325,7 +325,7 @@ exports.logout = async (req, res, next) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // Match login settings
-    samesite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Match login settings
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Match login settings
   });
 
   res.status(200).json({ success: true, message: "User logged out" });
@@ -582,7 +582,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     ),
     httpOnly: true, // Security: Cookie cannot be accessed by client-side JS
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    samesite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust for CORS
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust for CORS
   };
 
   res
