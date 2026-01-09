@@ -142,7 +142,7 @@ const Dashboard = () => {
         <div className="min-h-screen bg-gray-50 font-sans">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
                 {/* Header Section */}
-                <div className="md:flex md:items-center md:justify-between mb-8">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
                     <div className="flex-1 min-w-0">
                         <h2 className="text-3xl font-bold leading-7 text-gray-900 sm:text-4xl sm:truncate">
                             Student Dashboard
@@ -151,10 +151,10 @@ const Dashboard = () => {
                             Welcome back, <span className="font-semibold text-gray-800">{user?.name}</span>!
                         </p>
                     </div>
-                    <div className="flex mt-4 md:mt-0 md:ml-4">
+                    <div className="flex">
                         <button
                             onClick={handleLogout}
-                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all"
+                            className="w-full md:w-auto inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all"
                         >
                             <ArrowRightOnRectangleIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
                             Sign Out
@@ -226,11 +226,11 @@ const Dashboard = () => {
                                     
                                     <div>
                                         {paymentStatus === 'success' ? (
-                                            <div className="flex gap-3">
+                                            <div className="flex flex-col sm:flex-row gap-3">
                                                 {assessmentData && (
                                                     <button 
                                                         onClick={() => setShowAssessment(true)}
-                                                        className="inline-flex items-center px-4 py-2 border border-green-200 text-sm font-medium rounded-lg text-green-700 bg-green-50 hover:bg-green-100 shadow-sm transition-all group"
+                                                        className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-green-200 text-sm font-medium rounded-lg text-green-700 bg-green-50 hover:bg-green-100 shadow-sm transition-all group"
                                                     >
                                                         <DocumentTextIcon className="w-5 h-5 mr-2 text-green-600 group-hover:scale-110 transition-transform" />
                                                         View Report
@@ -238,7 +238,7 @@ const Dashboard = () => {
                                                 )}
                                                 <button 
                                                     onClick={handleDataAssessment}
-                                                    className="inline-flex items-center px-4 py-2 border border-indigo-200 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 shadow-sm transition-all group"
+                                                    className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-indigo-200 text-sm font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 shadow-sm transition-all group"
                                                 >
                                                     <SparklesIcon className="w-5 h-5 mr-2 text-indigo-600 group-hover:scale-110 transition-transform" />
                                                     {assessmentData ? 'Re-Assess AI' : 'AI Assessment'}
@@ -248,7 +248,7 @@ const Dashboard = () => {
                                                         console.log("Navigating to Course page...");
                                                         navigate('/course');
                                                     }}
-                                                    className="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-all"
+                                                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-all"
                                                 >
                                                     Go to Course <span className="ml-2">→</span>
                                                 </button>
@@ -257,7 +257,7 @@ const Dashboard = () => {
                                             <button 
                                                 onClick={handlePayment} 
                                                 disabled={paymentStatus === 'loading'}
-                                                className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-bold rounded-lg text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-md transform hover:-translate-y-0.5 transition-all"
+                                                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-bold rounded-lg text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-md transform hover:-translate-y-0.5 transition-all"
                                             >
                                                 {paymentStatus === 'loading' ? 'Processing...' : 'Enroll Now @ ₹199'}
                                             </button>

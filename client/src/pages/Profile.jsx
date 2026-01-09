@@ -213,7 +213,7 @@ const Profile = () => {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="pt-5 border-t border-gray-100 flex items-center justify-end gap-3">
+                        <div className="pt-5 border-t border-gray-100 flex flex-wrap items-center justify-end gap-3">
                             <button
                                 type="button"
                                 onClick={() => navigate('/dashboard')}
