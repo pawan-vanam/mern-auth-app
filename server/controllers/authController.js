@@ -576,6 +576,7 @@ exports.resendVerificationCode = async (req, res, next) => {
 const sendTokenResponse = (user, statusCode, res) => {
   const token = user.getSignedJwtToken();
 
+  console.log(`[Auth] NODE_ENV: ${process.env.NODE_ENV}`);
   const options = {
     expires: new Date(
       Date.now() + 30 * 24 * 60 * 60 * 1000 // 30 days
@@ -584,6 +585,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust for CORS
   };
+  console.log(`[Auth] Cookie Options:`, options);
 
   res
     .status(statusCode)

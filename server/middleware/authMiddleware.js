@@ -5,6 +5,9 @@ exports.protect = async (req, res, next) => {
   let token;
 
   // Check for token in cookies (preferred for security) or headers
+  console.log(`[AuthMiddleware] Cookies:`, req.cookies ? Object.keys(req.cookies) : "None");
+  console.log(`[AuthMiddleware] Headers Auth:`, req.headers.authorization ? "Present" : "None");
+
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
   } else if (
