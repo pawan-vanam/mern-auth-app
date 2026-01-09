@@ -2,7 +2,6 @@ const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const qs = require('qs'); // Ensure qs is available or use URLSearchParams
 const Payment = require('../models/Payment');
-const { sendCourseEnrollmentMessage } = require('../utils/whatsapp');
 const User = require('../models/User'); // Need User model to get profile/phone
 
 // CREDENTIALS
@@ -220,23 +219,6 @@ exports.checkStatus = async (req, res) => {
                     // Initialize Course Folders (Data/User/Course/Steps)
                     initializeCourseFolders(user.name, "Full Stack Web Development");
 
-                    // Since we didn't setup virtuals yet, let's fetch Profile manually
-                    const Profile = require('../models/Profile');
-                    const profile = await Profile.findOne({ user: payment.userId });
-
-                    let phone = profile?.phoneNumber;
-                    const name = user.name;
-                    
-                    // Fallback to a default number or check if phone exists
-                    if (phone) {
-                        // Ensure phone has country code for WhatsApp (defaulting to 91 if 10 digits)
-                        if (phone.length === 10) phone = '91' + phone; 
-                        
-                        console.log(`-> Sending WhatsApp to ${name} at ${phone}`);
-                        await sendCourseEnrollmentMessage(phone, name, "Full Stack Web Development");
-                    } else {
-                        console.log("-> No phone number found for user, skipping WhatsApp message.");
-                    }
                 } catch (msgErr) {
                     console.error("-> Failed to trigger Notifications:", msgErr);
                 }
