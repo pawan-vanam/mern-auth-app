@@ -84,7 +84,7 @@ const Profile = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-3xl mx-auto">
                 
                 {/* Header with Back Button */}
@@ -92,30 +92,30 @@ const Profile = () => {
                     <div>
                         <button
                             onClick={() => navigate('/dashboard')}
-                            className="group flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors"
+                            className="group flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
                         >
                             <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
                             Back to Dashboard
                         </button>
-                        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900">
+                        <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white transition-colors">
                             Edit Profile
                         </h1>
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400 transition-colors">
                             Update your personal information and preferences.
                         </p>
                     </div>
                 </div>
 
                 {/* Main Form Card */}
-                <div className="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+                <div className="bg-white dark:bg-slate-800 shadow-xl rounded-2xl overflow-hidden border border-gray-100 dark:border-slate-700 transition-colors duration-200">
                     <div className="bg-purple-600 h-2 w-full"></div> {/* Accent Bar */}
                     
                     <form onSubmit={handleSubmit} className="p-8 space-y-8">
                         
                         {/* Section: Personal Details */}
                         <div>
-                            <h3 className="text-lg font-medium leading-6 text-gray-900 flex items-center gap-2 mb-6 border-b pb-2">
-                                <ShieldCheckIcon className="h-5 w-5 text-purple-600" />
+                            <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-white flex items-center gap-2 mb-6 border-b border-gray-100 dark:border-slate-700 pb-2 transition-colors">
+                                <ShieldCheckIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                                 Personal Details
                             </h3>
                             
@@ -123,12 +123,12 @@ const Profile = () => {
                                 
                                 {/* Full Name */}
                                 <div className="sm:col-span-6">
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Full Name
                                     </label>
                                     <div className="mt-1 relative rounded-md shadow-sm">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <UserIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            <UserIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                                         </div>
                                         <input
                                             type="text"
@@ -137,7 +137,7 @@ const Profile = () => {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="block w-full pl-10 border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow"
+                                            className="block w-full pl-10 border-gray-300 dark:border-slate-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow bg-white dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                             placeholder="John Doe"
                                         />
                                     </div>
@@ -145,12 +145,12 @@ const Profile = () => {
 
                                 {/* Phone Number */}
                                 <div className="sm:col-span-3">
-                                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Phone Number
                                     </label>
                                     <div className="mt-1 relative rounded-md shadow-sm">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                           <span className="text-gray-500 sm:text-sm font-medium pr-1 border-r border-gray-300 mr-2">+91</span>
+                                           <span className="text-gray-500 dark:text-gray-400 sm:text-sm font-medium pr-1 border-r border-gray-300 dark:border-slate-600 mr-2">+91</span>
                                         </div>
                                         <input
                                             type="tel"
@@ -161,17 +161,17 @@ const Profile = () => {
                                             pattern="[0-9]{10}"
                                             placeholder="98765 43210"
                                             title="Please enter a valid 10-digit phone number"
-                                            className="block w-full pl-16 border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow"
+                                            className="block w-full pl-16 border-gray-300 dark:border-slate-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow bg-white dark:bg-slate-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                                         />
                                         <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            <PhoneIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            <PhoneIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Date of Birth */}
                                 <div className="sm:col-span-3">
-                                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Date of Birth
                                     </label>
                                     <div className="mt-1 relative rounded-md shadow-sm">
@@ -181,26 +181,26 @@ const Profile = () => {
                                             id="dateOfBirth"
                                             value={formData.dateOfBirth}
                                             onChange={handleChange}
-                                            className="block w-full border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow"
+                                            className="block w-full border-gray-300 dark:border-slate-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow bg-white dark:bg-slate-700 text-gray-900 dark:text-white calendar-dark"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Gender */}
                                 <div className="sm:col-span-3">
-                                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
+                                    <label htmlFor="gender" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                                         Gender
                                     </label>
                                     <div className="mt-1 relative rounded-md shadow-sm">
                                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                            <UsersIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                            <UsersIcon className="h-5 w-5 text-gray-400 dark:text-gray-500" aria-hidden="true" />
                                         </div>
                                         <select
                                             name="gender"
                                             id="gender"
                                             value={formData.gender}
                                             onChange={handleChange}
-                                            className="block w-full pl-10 border-gray-300 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow bg-white"
+                                            className="block w-full pl-10 border-gray-300 dark:border-slate-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 sm:text-sm p-2.5 border transition-shadow bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
                                         >
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
@@ -213,11 +213,11 @@ const Profile = () => {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="pt-5 border-t border-gray-100 flex flex-wrap items-center justify-end gap-3">
+                        <div className="pt-5 border-t border-gray-100 dark:border-slate-700 flex flex-wrap items-center justify-end gap-3 transition-colors">
                             <button
                                 type="button"
                                 onClick={() => navigate('/dashboard')}
-                                className="bg-white py-2 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
+                                className="bg-white dark:bg-slate-700 py-2 px-4 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
                             >
                                 Cancel
                             </button>

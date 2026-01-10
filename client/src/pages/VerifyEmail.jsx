@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import ThemeToggle from '../components/ThemeToggle';
 import toast from 'react-hot-toast';
 
 import axios from 'axios'; // Ensure axios is imported or use a configured instance
@@ -41,12 +42,16 @@ const VerifyEmail = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-900 px-4 sm:px-6 lg:px-8 transition-colors duration-200 relative">
+            <div className="absolute top-4 right-4">
+                <ThemeToggle />
+            </div>
+            
+            <div className="max-w-md w-full space-y-8 bg-white dark:bg-slate-800 p-8 rounded-xl shadow-lg transition-colors duration-200">
                 <div className="text-center">
-                    <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Verify your email</h2>
-                    <p className="mt-2 text-sm text-gray-600">
-                        We sent a verification code to <span className="font-bold">{email}</span>
+                    <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white transition-colors">Verify your email</h2>
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 transition-colors">
+                        We sent a verification code to <span className="font-bold text-gray-800 dark:text-gray-200">{email}</span>
                     </p>
                 </div>
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -65,12 +70,12 @@ const VerifyEmail = () => {
                     </Button>
 
                     <div className="text-center mt-4">
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 transition-colors">
                             Didn't receive code?{' '}
                             <button
                                 type="button"
                                 onClick={handleResend}
-                                className="font-medium text-blue-600 hover:text-blue-500 hover:underline"
+                                className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300 hover:underline"
                             >
                                 Resend
                             </button>

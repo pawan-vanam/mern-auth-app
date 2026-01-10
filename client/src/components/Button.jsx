@@ -5,7 +5,7 @@ const Button = ({ children, onClick, type = 'button', variant = 'primary', isLoa
   
   const variants = {
     primary: "bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500",
-    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800 focus:ring-gray-500",
+    secondary: "bg-gray-200 hover:bg-gray-300 text-gray-800 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-white focus:ring-gray-500",
     danger: "bg-red-600 hover:bg-red-700 text-white focus:ring-red-500",
   };
 

@@ -11,6 +11,7 @@ import {
     XMarkIcon,
     DocumentIcon
 } from '@heroicons/react/24/outline';
+import ThemeToggle from '../components/ThemeToggle';
 
 const Course = () => {
     const navigate = useNavigate();
@@ -107,36 +108,47 @@ const Course = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 font-sans py-10 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 font-sans py-10 px-4 sm:px-6 lg:px-8 transition-colors duration-200">
             <div className="max-w-5xl mx-auto">
                 
                 {/* Header */}
                 <div className="mb-10">
-                    <button
-                        onClick={() => navigate('/dashboard')}
-                        className="group flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 transition-colors mb-4"
-                    >
-                        <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
-                        Back to Dashboard
-                    </button>
-                    <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 rounded-full blur-3xl -mr-32 -mt-32 opacity-50"></div>
+                    <div className="flex justify-between items-center mb-4">
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="group flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
+                        >
+                            <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                            Back to Dashboard
+                        </button>
+                        <div className="sm:hidden">
+                            {/* Mobile Toggle Placement if needed, or rely on global/dashboard one. 
+                                Actually, let's put it in the main header block or top right.
+                            */}
+                        </div>
+                    </div>
+                    
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm border border-gray-100 dark:border-slate-700 relative overflow-hidden transition-colors duration-200">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-50 dark:bg-indigo-900/20 rounded-full blur-3xl -mr-32 -mt-32 opacity-50 transition-colors"></div>
                         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                             <div>
-                                <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                                <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight transition-colors">
                                     Full Stack Web Development
                                 </h1>
-                                <p className="mt-2 text-gray-500 max-w-2xl">
+                                <p className="mt-2 text-gray-500 dark:text-gray-400 max-w-2xl transition-colors">
                                     Upload your assignments code and screenshots below. Your progress is tracked automatically.
                                 </p>
                             </div>
-                            <button
-                                onClick={() => navigate('/uploaded-files')}
-                                className="inline-flex items-center px-4 py-2 border border-gray-200 shadow-sm text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 hover:text-indigo-600 transition-all self-start md:self-center"
-                            >
-                                <CloudArrowUpIcon className="mr-2 h-5 w-5 text-gray-400 group-hover:text-indigo-500" />
-                                Uploaded Files
-                            </button>
+                            <div className="flex items-center gap-3 self-start md:self-center">
+                                <ThemeToggle />
+                                <button
+                                    onClick={() => navigate('/uploaded-files')}
+                                    className="inline-flex items-center px-4 py-2 border border-gray-200 dark:border-slate-600 shadow-sm text-sm font-medium rounded-lg text-gray-700 dark:text-gray-200 bg-white dark:bg-slate-700 hover:bg-gray-50 dark:hover:bg-slate-600 hover:text-indigo-600 dark:hover:text-indigo-400 transition-all"
+                                >
+                                    <CloudArrowUpIcon className="mr-2 h-5 w-5 text-gray-400 dark:text-gray-400 group-hover:text-indigo-500 dark:group-hover:text-indigo-400" />
+                                    Uploaded Files
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,7 +158,7 @@ const Course = () => {
                     {modules.map((module) => (
                         <div 
                             key={module.id} 
-                            className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300"
+                            className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-md transition-all duration-300"
                         >
                             <div className="p-4 flex flex-col lg:flex-row lg:items-center gap-4">
                                 
@@ -156,10 +168,10 @@ const Course = () => {
                                         {module.id}
                                     </div>
                                     <div className="min-w-0">
-                                        <h3 className="text-base font-bold text-gray-900 truncate">
+                                        <h3 className="text-base font-bold text-gray-900 dark:text-white truncate transition-colors">
                                             {module.title}
                                         </h3>
-                                        <p className="text-xs text-gray-500 truncate">
+                                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate transition-colors">
                                             {module.description}
                                         </p>
                                     </div>
@@ -178,8 +190,8 @@ const Course = () => {
                                             <div key={type} className={`
                                                 relative group transition-all duration-200 rounded-lg border h-10 flex items-center px-3
                                                 ${!selectedFile 
-                                                    ? 'bg-gray-50/50 border-gray-200 hover:border-indigo-300 hover:bg-white cursor-pointer w-auto' 
-                                                    : 'bg-white border-gray-200'}
+                                                    ? 'bg-gray-50/50 dark:bg-slate-700/30 border-gray-200 dark:border-slate-600 hover:border-indigo-300 dark:hover:border-indigo-500 hover:bg-white dark:hover:bg-slate-700 cursor-pointer w-auto' 
+                                                    : 'bg-white dark:bg-slate-700 border-gray-200 dark:border-slate-600'}
                                             `}>
                                                 
                                                 {!selectedFile ? (
@@ -188,12 +200,12 @@ const Course = () => {
                                                         className="flex items-center gap-3 cursor-pointer"
                                                         onClick={() => handleFileSelect(module.id, type)}
                                                     >
-                                                        <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5 group-hover:text-indigo-600 transition-colors">
+                                                        <span className="text-[11px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                                             {isCode ? <CodeBracketIcon className="w-4 h-4" /> : <PhotoIcon className="w-4 h-4" />}
                                                             {type}
                                                         </span>
                                                         
-                                                        <div className="w-px h-4 bg-gray-200 group-hover:bg-indigo-100 transition-colors"></div>
+                                                        <div className="w-px h-4 bg-gray-200 dark:bg-slate-600 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900 transition-colors"></div>
 
                                                         <div className="flex items-center">
                                                             <input 
@@ -204,7 +216,7 @@ const Course = () => {
                                                                 onChange={(e) => onFileChange(e, module.id, type)}
                                                                 onClick={(e) => e.stopPropagation()} 
                                                             />
-                                                            <span className="text-[11px] font-semibold text-indigo-600 group-hover:text-indigo-700 transition-colors">
+                                                            <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors">
                                                                 + Select
                                                             </span>
                                                         </div>
@@ -220,16 +232,16 @@ const Course = () => {
                                                             disabled={status === 'uploading'}
                                                         >
                                                             {isCode ? (
-                                                                <DocumentIcon className="w-4 h-4 text-gray-400 group-hover/file:text-red-500 transition-colors flex-shrink-0" />
+                                                                <DocumentIcon className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover/file:text-red-500 transition-colors flex-shrink-0" />
                                                             ) : (
-                                                                <PhotoIcon className="w-4 h-4 text-gray-400 group-hover/file:text-red-500 transition-colors flex-shrink-0" />
+                                                                <PhotoIcon className="w-4 h-4 text-gray-400 dark:text-gray-500 group-hover/file:text-red-500 transition-colors flex-shrink-0" />
                                                             )}
                                                             
-                                                            <span className="text-xs text-gray-700 font-medium truncate group-hover/file:text-red-600 transition-colors">
+                                                            <span className="text-xs text-gray-700 dark:text-gray-200 font-medium truncate group-hover/file:text-red-600 dark:group-hover/file:text-red-400 transition-colors">
                                                                 {selectedFile.name}
                                                             </span>
                                                             
-                                                            <XMarkIcon className="w-4 h-4 text-gray-300 group-hover/file:text-red-500 opacity-0 group-hover/file:opacity-100 transition-all flex-shrink-0" />
+                                                            <XMarkIcon className="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover/file:text-red-500 opacity-0 group-hover/file:opacity-100 transition-all flex-shrink-0" />
                                                         </button>
 
                                                         {/* Upload Action */}
