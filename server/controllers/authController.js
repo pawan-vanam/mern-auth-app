@@ -2,6 +2,7 @@ const User = require("../models/User");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const { OAuth2Client } = require("google-auth-library");
+const axios = require("axios");
 
 // --- EMAIL MOCKING / SENDING LOGIC ---
 // In a real app, use SendGrid, AWS SES, or a real SMTP provider.
@@ -252,28 +253,35 @@ exports.googleLogin = async (req, res, next) => {
       throw new Error("No token provided");
     }
 
-    const jwt = require("jsonwebtoken"); // Import at top or here for debugging
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+    
+    let name, email, googleId, picture;
 
-    // DEBUG: Decode token to see what Client ID the frontend is using
-    const decodedToken = jwt.decode(token);
-    console.log("------------------------------------------");
-    console.log(
-      "-> DEBUG: Incoming Token Audience (aud):",
-      decodedToken ? decodedToken.aud : "Failed to decode"
-    );
-    console.log(
-      "-> DEBUG: Server Expected Client ID:",
-      process.env.GOOGLE_CLIENT_ID
-    );
-    console.log("------------------------------------------");
+    // Check if token looks like a JWT (ID Token)
+    if (token.startsWith('ey')) {
+         console.log("-> Verifying ID Token...");
+         const ticket = await client.verifyIdToken({
+           idToken: token,
+           audience: process.env.GOOGLE_CLIENT_ID,
+         });
+         const payload = ticket.getPayload();
+         email = payload.email;
+         name = payload.name;
+         googleId = payload.sub;
+         picture = payload.picture;
+    } else {
+        // Assume Access Token
+        console.log("-> Verifying Access Token...");
+        const response = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = response.data;
+        email = data.email;
+        name = data.name;
+        googleId = data.sub;
+        picture = data.picture;
+    }
 
-    console.log("-> Verifying ID Token...");
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
-    const { name, email, sub: googleId, picture } = ticket.getPayload();
     console.log("-> Token Verified. User:", email);
 
     let user = await User.findOne({ email });
