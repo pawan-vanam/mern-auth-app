@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 
-const Input = ({ label, type = 'text', placeholder, value, onChange, required = false, disabled = false }) => {
+const Input = ({ label, name, type = 'text', placeholder, value, onChange, required = false, disabled = false }) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === 'password';
 
@@ -20,6 +20,7 @@ const Input = ({ label, type = 'text', placeholder, value, onChange, required = 
       )}
       <div className="relative">
         <input
+          name={name}
           type={inputType}
           placeholder={placeholder}
           value={value}

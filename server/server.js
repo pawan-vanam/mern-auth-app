@@ -73,6 +73,7 @@ app.use('/api/payment', require('./routes/paymentRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/assessment', require('./routes/assessmentRoutes'));
+app.use('/api/courses', require('./routes/courseRoutes'));
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

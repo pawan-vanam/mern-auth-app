@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { 
     ArrowLeftIcon, 
@@ -15,6 +15,10 @@ import ThemeToggle from '../components/ThemeToggle';
 
 const UploadedFiles = () => {
     const navigate = useNavigate();
+    const { courseId } = useParams();
+    // Simple helper to convert slug to Title Case
+    const courseName = courseId ? courseId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : 'Full Stack Web Development';
+
     const [loading, setLoading] = useState(true);
     const [files, setFiles] = useState([]);
     const [error, setError] = useState(null);
@@ -31,9 +35,8 @@ const UploadedFiles = () => {
     useEffect(() => {
         const fetchFiles = async () => {
             try {
-                // Change base URL logic if needed as per previous axios fixes (no /api prefix if baseURL has it)
-                // Assuming standard axios config here:
-                const { data } = await axios.get('/upload/Full%20Stack%20Web%20Development');
+                // Use the derived courseName for the API call
+                const { data } = await axios.get(`/upload/${encodeURIComponent(courseName)}`);
                 if (data.success) {
                     setFiles(data.data);
                 }
@@ -73,7 +76,7 @@ const UploadedFiles = () => {
                 <div className="mb-8">
                      <div className="flex justify-between items-center mb-4">
                         <button
-                            onClick={() => navigate('/course')}
+                            onClick={() => navigate(`/course/${courseId}`)}
                             className="group flex items-center text-sm font-medium text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors"
                         >
                             <ArrowLeftIcon className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />

@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+  role: {
+     type: String, 
+     enum: ['user', 'admin'],
+     default: 'user'
+  },
   googleId: {
     type: String,
     unique: true,
@@ -68,7 +73,7 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
 
 // Sign JWT and return
 userSchema.methods.getSignedJwtToken = function() {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
     expiresIn: '30d' // Session duration
   });
 };

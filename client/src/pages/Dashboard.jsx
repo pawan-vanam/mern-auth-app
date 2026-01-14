@@ -1,23 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import Button from '../components/Button';
 import ThemeToggle from '../components/ThemeToggle';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import AssessmentResult from '../components/AssessmentResult';
+import CourseCard from '../components/CourseCard';
 import { 
-    UserCircleIcon, 
     CheckBadgeIcon, 
     ExclamationTriangleIcon,
-    AcademicCapIcon, 
-    ArrowRightOnRectangleIcon,
     PencilSquareIcon,
-    BookOpenIcon,
-    ClockIcon,
-    VideoCameraIcon,
-    SparklesIcon,
-    DocumentTextIcon
+    ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline'; 
 
 const Dashboard = () => {
@@ -30,107 +23,55 @@ const Dashboard = () => {
     };
 
     const [searchParams] = useSearchParams();
-    const [paymentStatus, setPaymentStatus] = useState('idle');
+    const [courses, setCourses] = useState([]);
+    const [loadingCourses, setLoadingCourses] = useState(true);
+
     const [showAssessment, setShowAssessment] = useState(false);
     const [assessmentData, setAssessmentData] = useState(null);
     const [isAssessing, setIsAssessing] = useState(false);
 
     useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const { data } = await axios.get('/courses');
+                if (data.success) {
+                    setCourses(data.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch courses", error);
+                toast.error("Failed to load courses");
+            } finally {
+                setLoadingCourses(false);
+            }
+        };
+
         const checkPaymentStatus = async () => {
-            const code = searchParams.get('code');
+             const code = searchParams.get('code');
             const transactionId = searchParams.get('merchantOrderId');
 
             if ((code === 'PAYMENT_SUCCESS' || code === 'VERIFY') && transactionId) {
-                setPaymentStatus('loading');
                 try {
                     const { data } = await axios.post('/payment/status', {
                         merchantTransactionId: transactionId
                     });
 
                     if (data.success) {
-                        setPaymentStatus('success');
                         toast.success('Enrollment successful! Welcome to the course.');
                     } else {
-                        setPaymentStatus('failed');
                         toast.error(data.message || 'Payment verification failed');
                     }
                 } catch (error) {
-                    setPaymentStatus('failed');
                     toast.error('Could not verify payment status');
                 }
                 window.history.replaceState({}, '', '/dashboard');
             } else if (code === 'PAYMENT_ERROR') {
-                setPaymentStatus('failed');
                 toast.error('Payment failed');
             }
         };
 
-        const fetchUserStatus = async () => {
-            try {
-                const { data } = await axios.get('/payment/user-status');
-                if (data.isPaid) {
-                    setPaymentStatus('success');
-                }
-            } catch (error) {
-                console.error("Failed to fetch user payment status", error);
-            }
-        };
-
-        const fetchAssessmentStatus = async () => {
-            try {
-                // Remove /api prefix if base URL has it, otherwise keep it. 
-                // Based on previous fix, we removed /api. checking if retrieval needs it too.
-                // assessmentRoutes is mounted at /api/assessment.
-                // previous fix removed /api prefix from POST request because axios baseURL likely includes /api.
-                // So GET should also match: /assessment/Full%20Stack%20Web%20Development
-                const { data } = await axios.get('/assessment/Full%20Stack%20Web%20Development');
-                if (data.success && data.data) {
-                    setAssessmentData(data.data);
-                }
-            } catch (error) {
-                // If 404, it just means no assessment yet. silent fail.
-                console.log("No existing assessment found or error fetching.");
-            }
-        };
-
+        fetchCourses();
         checkPaymentStatus();
-        fetchUserStatus();
-        fetchAssessmentStatus();
     }, [searchParams]);
-
-    const handleDataAssessment = async () => {
-        setIsAssessing(true);
-        setShowAssessment(true);
-        try {
-            const { data } = await axios.post('/assessment', { 
-                courseName: 'Full Stack Web Development' 
-            });
-            if (data.success) {
-                setAssessmentData(data.data);
-                toast.success('Assessment Completed!');
-            }
-        } catch (error) {
-            console.error(error);
-            toast.error(error.response?.data?.message || 'Assessment Failed');
-            setShowAssessment(false);
-        } finally {
-            setIsAssessing(false);
-        }
-    };
-
-    const handlePayment = async () => {
-        try {
-            const { data } = await axios.post('/payment/pay', { amount: 199 });
-            if (data.success && data.url) {
-                window.location.href = data.url;
-            } else {
-                toast.error(data.message || 'Payment initiation failed');
-            }
-        } catch (error) {
-            const msg = error.response?.data?.message || 'Something went wrong';
-            toast.error(msg);
-        }
-    };
 
     const getInitials = (name) => {
         if (!name) return '';
@@ -167,107 +108,27 @@ const Dashboard = () => {
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     
                     {/* Course Card */}
-                    <div className="lg:col-span-2 space-y-6">
-                        
-                         {/* Active Course / Enrollment Card */}
-                         <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-lg rounded-2xl border border-gray-100 dark:border-slate-700 transition-all hover:shadow-xl duration-200">
-                             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white">
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm border border-white/30 text-white mb-3">
-                                            <AcademicCapIcon className="w-3 h-3 mr-1" />
-                                            Active Batch 2024
-                                        </span>
-                                        <h3 className="text-2xl font-bold mb-1">Full Stack Web Development</h3>
-                                        <p className="text-blue-100 text-sm">Valid for 6 Months • 100% Online</p>
+                    <div className="lg:col-span-2">
+                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Available Courses</h3>
+                        {loadingCourses ? (
+                            <div className="text-center py-10">Loading courses...</div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {courses.length > 0 ? (
+                                    courses.map(course => (
+                                        <CourseCard 
+                                            key={course._id} 
+                                            course={course} 
+                                            onClick={() => navigate(`/course/${course.slug}`)}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="col-span-2 text-center py-10 text-gray-500 dark:text-gray-400 bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700">
+                                        No courses available at the moment.
                                     </div>
-                                    <div className="h-12 w-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
-                                        <BookOpenIcon className="h-7 w-7 text-white" />
-                                    </div>
-                                </div>
-                             </div>
-                             
-                             <div className="p-6">
-                                <div className="grid grid-cols-2 gap-4 mb-6">
-                                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg transition-colors">
-                                        <VideoCameraIcon className="h-5 w-5 text-indigo-500" />
-                                        <div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Lectures</p>
-                                            <p className="font-semibold text-gray-900 dark:text-white">45+ Hours</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg transition-colors">
-                                        <ClockIcon className="h-5 w-5 text-indigo-500" />
-                                        <div>
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">Validation</p>
-                                            <p className="font-semibold text-gray-900 dark:text-white">Lifetime Access</p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-end justify-between border-t border-gray-100 dark:border-slate-700 pt-6 transition-colors">
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Enrollment Status</p>
-                                        {paymentStatus === 'success' ? (
-                                            <div className="flex items-center gap-2">
-                                                <span className="flex h-3 w-3 relative">
-                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-                                                </span>
-                                                <span className="text-green-700 dark:text-green-400 font-bold transition-colors">Enrolled Active</span>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center gap-2">
-                                                 <span className="flex h-3 w-3 relative">
-                                                    <span className="relative inline-flex rounded-full h-3 w-3 bg-gray-300 dark:bg-slate-600"></span>
-                                                </span>
-                                                <span className="text-gray-500 dark:text-gray-400 font-semibold transition-colors">Not Enrolled</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    <div>
-                                        {paymentStatus === 'success' ? (
-                                            <div className="flex flex-col sm:flex-row gap-3">
-                                                {assessmentData && (
-                                                    <button 
-                                                        onClick={() => setShowAssessment(true)}
-                                                        className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-green-200 dark:border-green-800 text-sm font-medium rounded-lg text-green-700 dark:text-green-300 bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 shadow-sm transition-all group"
-                                                    >
-                                                        <DocumentTextIcon className="w-5 h-5 mr-2 text-green-600 dark:text-green-400 group-hover:scale-110 transition-transform" />
-                                                        View Report
-                                                    </button>
-                                                )}
-                                                <button 
-                                                    onClick={handleDataAssessment}
-                                                    className="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 border border-indigo-200 dark:border-indigo-800 text-sm font-medium rounded-lg text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/30 shadow-sm transition-all group"
-                                                >
-                                                    <SparklesIcon className="w-5 h-5 mr-2 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform" />
-                                                    {assessmentData ? 'Re-Assess AI' : 'AI Assessment'}
-                                                </button>
-                                                <button 
-                                                    onClick={() => {
-                                                        console.log("Navigating to Course page...");
-                                                        navigate('/course');
-                                                    }}
-                                                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-all"
-                                                >
-                                                    Go to Course <span className="ml-2">→</span>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <button 
-                                                onClick={handlePayment} 
-                                                disabled={paymentStatus === 'loading'}
-                                                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border border-transparent text-sm font-bold rounded-lg text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-md transform hover:-translate-y-0.5 transition-all"
-                                            >
-                                                {paymentStatus === 'loading' ? 'Processing...' : 'Enroll Now @ ₹199'}
-                                            </button>
-                                        )}
-                                    </div>
-                                </div>
-                             </div>
-                         </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Sidebar / Profile Summary */}
@@ -315,8 +176,6 @@ const Dashboard = () => {
                                 </div>
                              </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

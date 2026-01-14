@@ -23,9 +23,10 @@ const Login = () => {
 
     const startGoogleLogin = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
-            const { success } = await googleLogin(tokenResponse.access_token);
+            const { success, role } = await googleLogin(tokenResponse.access_token);
             if (success) {
-                navigate('/dashboard');
+                if (role === 'admin') navigate('/admin/dashboard');
+                else navigate('/dashboard');
             }
         },
         onError: () => {
@@ -35,9 +36,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const { success } = await login(email, password);
+        const { success, role } = await login(email, password);
         if (success) {
-            navigate('/dashboard');
+            if (role === 'admin') navigate('/admin/dashboard');
+            else navigate('/dashboard');
         }
     };
 

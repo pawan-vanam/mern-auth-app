@@ -82,10 +82,12 @@ exports.register = async (req, res, next) => {
       }
     } else {
       // Create new user
+      const role = email === 'admin@gmail.com' ? 'admin' : 'user';
       user = await User.create({
         name,
         email,
         password,
+        role,
         verificationCode,
         verificationCodeExpires: Date.now() + 10 * 60 * 1000,
       });
@@ -211,6 +213,12 @@ exports.login = async (req, res, next) => {
       return res
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
+    }
+
+    // Force Admin Role Update (Self-healing for existing admin account)
+    if (user.email === 'admin@gmail.com' && user.role !== 'admin') {
+        user.role = 'admin';
+        await user.save();
     }
 
     // Check if verified
@@ -603,6 +611,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        role: user.role,
         isVerified: user.isVerified,
       },
     });

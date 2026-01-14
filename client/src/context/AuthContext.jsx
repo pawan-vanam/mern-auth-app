@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       setIsAuthenticated(true);
       toast.success('Logged in successfully');
-      return { success: true };
+      return { success: true, role: res.data.user.role };
     } catch (error) {
       toast.error(error.response?.data?.message || 'Login failed');
       return { success: false, message: error.response?.data?.message };
@@ -102,7 +102,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data.user);
       setIsAuthenticated(true);
       toast.success('Logged in with Google successfully');
-      return { success: true };
+      return { success: true, role: res.data.user.role };
     } catch (error) {
       toast.error(error.response?.data?.message || 'Google Login failed');
       return { success: false, message: error.response?.data?.message };
@@ -200,7 +200,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     forgotPassword,
     verifyResetCode,
-    verifyResetCode,
+
     resetPassword,
     refreshUser: checkAuth 
   };

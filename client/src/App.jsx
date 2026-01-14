@@ -12,6 +12,11 @@ import Profile from './pages/Profile';
 import Course from './pages/Course';
 import Loader from './components/Loader';
 import UploadedFiles from './pages/UploadedFiles';
+import AdminRoute from './components/AdminRoute';
+import AdminLayout from './pages/admin/AdminLayout';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ManageCourses from './pages/admin/ManageCourses';
+import AddCourse from './pages/admin/AddCourse';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -89,17 +94,29 @@ function App() {
                 </ProtectedRoute>
             } />
             
-            <Route path="/course" element={
+            <Route path="/course/:courseId" element={
                 <ProtectedRoute>
                     <Course />
                 </ProtectedRoute>
             } />
 
-            <Route path="/uploaded-files" element={
+
+            <Route path="/uploaded-files/:courseId" element={
                 <ProtectedRoute>
                     <UploadedFiles />
                 </ProtectedRoute>
             } />
+
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminRoute />}>
+                <Route element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                    <Route path="dashboard" element={<AdminDashboard />} />
+                    <Route path="courses" element={<ManageCourses />} />
+                    <Route path="courses/new" element={<AddCourse />} />
+                    <Route path="courses/edit/:id" element={<AddCourse />} />
+                </Route>
+            </Route>
         </Routes>
       </AuthProvider>
     </Router>
