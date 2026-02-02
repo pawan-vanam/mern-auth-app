@@ -22,6 +22,7 @@ const Dashboard = () => {
         navigate('/login');
     };
 
+    // Forced update to trigger deployment
     const [searchParams] = useSearchParams();
     const [courses, setCourses] = useState([]);
     const [loadingCourses, setLoadingCourses] = useState(true);
