@@ -253,10 +253,16 @@ exports.checkStatus = async (req, res) => {
 exports.getUserPaymentStatus = async (req, res) => {
     try {
         const userId = req.user.id;
+        const { courseId } = req.query;
+
+        if (!courseId) {
+            return res.status(400).json({ success: false, message: "Course ID is required" });
+        }
         
-        // Find the most recent successful payment
+        // Find successful payment for THIS SPECIFIC COURSE
         const payment = await Payment.findOne({ 
             userId, 
+            courseId,
             status: 'PAYMENT_SUCCESS' 
         }).sort({ createdAt: -1 });
 

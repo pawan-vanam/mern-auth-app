@@ -63,7 +63,10 @@ const Course = () => {
         
         const fetchUserStatus = async () => {
             try {
-                const { data } = await axios.get('/payment/user-status');
+                // Pass courseData._id (which is the actual DB ID) not courseId (which is slug)
+                const { data } = await axios.get('/payment/user-status', {
+                    params: { courseId: courseData._id }
+                });
                 if (data.isPaid) {
                     setPaymentStatus('success');
                 }
