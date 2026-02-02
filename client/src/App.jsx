@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -46,7 +47,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <Toaster position='top-center' reverseOrder={false} />
+        <ToastContainer position="bottom-right" autoClose={3000} theme="colored" hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         <Routes>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
             

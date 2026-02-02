@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import ThemeToggle from '../components/ThemeToggle';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import AssessmentResult from '../components/AssessmentResult';
 import CourseCard from '../components/CourseCard';
 import { 

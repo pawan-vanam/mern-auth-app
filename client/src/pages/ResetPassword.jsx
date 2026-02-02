@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import ThemeToggle from '../components/ThemeToggle';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const ResetPassword = () => {
     const [password, setPassword] = useState('');

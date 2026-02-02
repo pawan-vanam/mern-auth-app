@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 import IconPicker from '../../components/IconPicker';

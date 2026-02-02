@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { PlusIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 const ManageCourses = () => {
     const [courses, setCourses] = useState([]);
