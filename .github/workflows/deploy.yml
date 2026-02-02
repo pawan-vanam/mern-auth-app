@@ -18,5 +18,5 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            sudo chmod +x /var/www/pawan-temp-backend/deploy.sh
-            sudo /var/www/pawan-temp-backend/deploy.sh
+            chmod +x /var/www/pawan-temp-backend/deploy.sh
+            /var/www/pawan-temp-backend/deploy.sh
