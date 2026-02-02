@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClockIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, ArrowLongRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import * as LucideIcons from 'lucide-react';
 
 const getIcon = (iconName) => {
@@ -92,9 +92,9 @@ const CourseCard = ({ course, isEnrolled, onClick }) => {
                         {duration}
                     </div>
                     {isEnrolled ? (
-                        <button className="text-sm font-bold text-green-600 dark:text-green-400 flex items-center hover:underline bg-transparent p-0 group-hover:translate-x-1 transition-transform">
-                            Continue Learning
-                            <ArrowLongRightIcon className="w-4 h-4 ml-1" />
+                        <button className="text-sm font-bold text-green-600 dark:text-green-400 flex items-center bg-transparent p-0 cursor-default">
+                            <CheckCircleIcon className="w-5 h-5 mr-1.5" />
+                            Enrolled
                         </button>
                     ) : (
                         <button className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center hover:underline bg-transparent p-0 group-hover:translate-x-1 transition-transform">
