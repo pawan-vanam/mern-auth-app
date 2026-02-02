@@ -57,10 +57,10 @@ const getAuthToken = async () => {
  */
 exports.initiatePayment = async (req, res) => {
     try {
-        const { amount } = req.body; 
+        const { amount, courseId } = req.body; 
         const userId = req.user.id; // From auth middleware
 
-        if (!amount) return res.status(400).json({ success: false, message: 'Amount is required' });
+        if (!amount || !courseId) return res.status(400).json({ success: false, message: 'Amount and Course ID are required' });
 
         // 1. Get Token
         const accessToken = await getAuthToken();
@@ -71,6 +71,7 @@ exports.initiatePayment = async (req, res) => {
         // 3. Create Pending Payment Record in DB
         await Payment.create({
             userId,
+            courseId,
             merchantTransactionId: merchantOrderId,
             amount,
             status: 'PENDING'
@@ -203,6 +204,14 @@ exports.checkStatus = async (req, res) => {
             payment.paymentDetails = response.data;
             await payment.save();
             console.log(`-> Updated Payment DB Status: ${payment.status}`);
+
+            // Enroll User if Success
+            if (payment.status === 'PAYMENT_SUCCESS') {
+                await User.findByIdAndUpdate(payment.userId, {
+                    $addToSet: { enrolledCourses: payment.courseId }
+                });
+                console.log(`-> User Enrolled in Course: ${payment.courseId}`);
+            }
 
             // NEW: Send WhatsApp Message if successful and NOT already sent
             // Only send if we are transitioning to success for the first time

@@ -90,7 +90,10 @@ const Course = () => {
     const handlePayment = async () => {
         try {
             setPaymentStatus('loading');
-            const { data } = await axios.post('/payment/pay', { amount: courseData.price });
+            const { data } = await axios.post('/payment/pay', { 
+                amount: courseData.price,
+                courseId: courseData._id 
+            });
             if (data.success && data.url) {
                 window.location.href = data.url;
             } else {

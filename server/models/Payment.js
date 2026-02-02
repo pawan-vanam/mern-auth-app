@@ -11,6 +11,11 @@ const PaymentSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  courseId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course',
+    required: true
+  },
   amount: {
     type: Number,
     required: true

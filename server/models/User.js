@@ -57,6 +57,11 @@ const userSchema = new mongoose.Schema({
     type: Date,
     select: false
   },
+  enrolledCourses: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Course',
+    default: []
+  }]
 }, { timestamps: true });
 
 // Encrypt password before saving

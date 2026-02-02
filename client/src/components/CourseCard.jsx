@@ -28,7 +28,7 @@ const getThemeColor = (theme) => {
     }
 };
 
-const CourseCard = ({ course, onClick }) => {
+const CourseCard = ({ course, isEnrolled, onClick }) => {
     const { 
         category, 
         categoryCode,
@@ -91,10 +91,17 @@ const CourseCard = ({ course, onClick }) => {
                         <ClockIcon className="w-4 h-4 mr-1.5" />
                         {duration}
                     </div>
-                    <button className="text-sm font-bold text-green-600 dark:text-green-400 flex items-center hover:underline bg-transparent p-0 group-hover:translate-x-1 transition-transform">
-                        View Details
-                        <ArrowLongRightIcon className="w-4 h-4 ml-1" />
-                    </button>
+                    {isEnrolled ? (
+                        <button className="text-sm font-bold text-green-600 dark:text-green-400 flex items-center hover:underline bg-transparent p-0 group-hover:translate-x-1 transition-transform">
+                            Continue Learning
+                            <ArrowLongRightIcon className="w-4 h-4 ml-1" />
+                        </button>
+                    ) : (
+                        <button className="text-sm font-bold text-indigo-600 dark:text-indigo-400 flex items-center hover:underline bg-transparent p-0 group-hover:translate-x-1 transition-transform">
+                            Enroll Now
+                            <ArrowLongRightIcon className="w-4 h-4 ml-1" />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

@@ -108,18 +108,42 @@ const Dashboard = () => {
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     
-                    {/* Course Card */}
-                    <div className="lg:col-span-2">
-                         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Available Courses</h3>
+                    {/* Course Sections */}
+                    <div className="lg:col-span-2 space-y-10">
+                        {/* Enrolled Courses */}
+                        {user?.enrolledCourses?.length > 0 && (
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">My Learning</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    {courses
+                                        .filter(course => user.enrolledCourses.some(ec => ec._id === course._id || ec === course._id))
+                                        .map(course => (
+                                            <CourseCard 
+                                                key={course._id} 
+                                                course={course} 
+                                                isEnrolled={true}
+                                                onClick={() => navigate(`/course/${course.slug}`)}
+                                            />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Available Courses */}
+                        <div>
+                             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Explore Courses</h3>
                         {loadingCourses ? (
                             <div className="text-center py-10">Loading courses...</div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {courses.length > 0 ? (
-                                    courses.map(course => (
+                                    courses
+                                        .filter(course => !user?.enrolledCourses?.some(ec => ec._id === course._id || ec === course._id))
+                                        .map(course => (
                                         <CourseCard 
                                             key={course._id} 
                                             course={course} 
+                                            isEnrolled={false}
                                             onClick={() => navigate(`/course/${course.slug}`)}
                                         />
                                     ))
@@ -130,7 +154,8 @@ const Dashboard = () => {
                                 )}
                             </div>
                         )}
-                    </div>
+                            </div>
+                        </div>
 
                     {/* Sidebar / Profile Summary */}
                     <div className="lg:col-span-1 space-y-6">
